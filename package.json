@@ -74,5 +74,14 @@
       "eslint --fix"
     ]
   },
+  "prettier": {
+    "trailingComma": "all",
+    "semi": true,
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "printWidth": 120,
+    "bracketSameLine": true,
+    "htmlWhitespaceSensitivity": "strict"
+  },
   "packageManager": "pnpm@8.9.2"
 }
