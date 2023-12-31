@@ -23,6 +23,7 @@ function injectCangerBtn() {
     textarea.addEventListener("focus", event => {
       setTimeout(() => {
         attachCanger(textarea)
+        console.info(`${CONTENT_PREFIX} attach canger to textarea`)
       }, 200)
     })
   })
