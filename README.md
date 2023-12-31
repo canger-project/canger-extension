@@ -8,7 +8,6 @@
 ![GitHub action badge](https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite/actions/workflows/build-zip.yml/badge.svg)
 <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/Jonghakseo/chrome-extension-boilerplate-react-viteFactions&count_bg=%23#222222&title_bg=%23#454545&title=😀&edge_flat=true" alt="hits"/>
 
-
 > This project is listed in the [Awesome Vite](https://github.com/vitejs/awesome-vite)
 
 </div>
@@ -18,23 +17,24 @@
 - [Intro](#intro)
 - [Features](#features)
 - [Installation](#installation)
-    - [Procedures](#procedures)
-        - [Chrome](#chrome)
-        - [Firefox](#firefox)
+  - [Procedures](#procedures)
+    - [Chrome](#chrome)
+    - [Firefox](#firefox)
 - [Add Style Library](#add-style-library)
-    - [Twind](#twind)
-    - [Chakra UI](#chakra-ui)
+  - [Twind](#twind)
+  - [Chakra UI](#chakra-ui)
 - [Pages](#pages)
 - [Screenshots](#screenshots)
-    - [NewTab](#newtab)
-    - [Popup](#popup)
-    - [Devtools](#devtools)
+  - [NewTab](#newtab)
+  - [Popup](#popup)
+  - [Devtools](#devtools)
 - [Examples](#examples)
 - [Documents](#documents)
 
 ## Intro <a name="intro"></a>
 
 This boilerplate is made for creating chrome extensions using React and Typescript.
+
 > The focus was on improving the build speed and development experience with Vite.
 
 ## Features <a name="features"></a>
@@ -67,8 +67,8 @@ This boilerplate is made for creating chrome extensions using React and Typescri
 ### For Chrome: <a name="chrome"></a>
 
 1. Run:
-    - Dev: `pnpm dev` or `npm run dev`
-    - Prod: `pnpm build` or `npm run build`
+   - Dev: `pnpm dev` or `npm run dev`
+   - Prod: `pnpm build` or `npm run build`
 2. Open in browser - `chrome://extensions`
 3. Check - `Developer mode`
 4. Find and Click - `Load unpacked extension`
@@ -77,8 +77,8 @@ This boilerplate is made for creating chrome extensions using React and Typescri
 ### For Firefox: <a name="firefox"></a>
 
 1. Run:
-    - Dev: `pnpm dev:firefox` or `npm run dev:firefox`
-    - Prod: `pnpm build:firefox` or `npm run build:firefox`
+   - Dev: `pnpm dev:firefox` or `npm run dev:firefox`
+   - Prod: `pnpm build:firefox` or `npm run build:firefox`
 2. Open in browser - `about:debugging#/runtime/this-firefox`
 3. Find and Click - `Load Temporary Add-on...`
 4. Select - `manifest.json` from `dist` folder
@@ -93,9 +93,9 @@ This boilerplate is made for creating chrome extensions using React and Typescri
 content_scripts: [
   {
     // YOU NEED TO DELETE THIS
-    css: ["assets/css/contentStyle<KEY>.chunk.css"]
-  }
-];
+    css: ["assets/css/contentStyle<KEY>.chunk.css"],
+  },
+]
 ```
 
 ### Twind <a name="twind"></a>
@@ -114,13 +114,13 @@ $ pnpm install -D @twind/core @twind/preset-autoprefix @twind/preset-tailwind
 <summary>twind.config.ts</summary>
 
 ```ts
-import { defineConfig } from '@twind/core';
-import presetTailwind from '@twind/preset-tailwind';
-import presetAutoprefix from '@twind/preset-autoprefix';
+import { defineConfig } from "@twind/core"
+import presetTailwind from "@twind/preset-tailwind"
+import presetAutoprefix from "@twind/preset-autoprefix"
 
 export default defineConfig({
   presets: [presetAutoprefix(), presetTailwind()],
-});
+})
 ```
 
 </details>
@@ -131,18 +131,18 @@ export default defineConfig({
 <summary>src/shared/style/twind.ts</summary>
 
 ```ts
-import { twind, cssom, observe } from '@twind/core';
-import 'construct-style-sheets-polyfill';
-import config from '@root/twind.config';
+import { twind, cssom, observe } from "@twind/core"
+import "construct-style-sheets-polyfill"
+import config from "@root/twind.config"
 
 export function attachTwindStyle<T extends { adoptedStyleSheets: unknown }>(
   observedElement: Element,
   documentOrShadowRoot: T,
 ) {
-  const sheet = cssom(new CSSStyleSheet());
-  const tw = twind(config, sheet);
-  observe(tw, observedElement);
-  documentOrShadowRoot.adoptedStyleSheets = [sheet.target];
+  const sheet = cssom(new CSSStyleSheet())
+  const tw = twind(config, sheet)
+  observe(tw, observedElement)
+  documentOrShadowRoot.adoptedStyleSheets = [sheet.target]
 }
 ```
 
@@ -176,6 +176,7 @@ import { attachTwindStyle } from '@src/shared/style/twind';
 attachTwindStyle(rootIntoShadow, shadowRoot);
 createRoot(rootIntoShadow).render(<App />);
 ```
+
 </details>
 
 [See more examples](https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite/pull/244/)
@@ -200,18 +201,15 @@ export default defineConfig({
     rollupOptions: {
       // Add below code ~~~~~
       onwarn(warning, warn) {
-        if (
-          warning.code === "MODULE_LEVEL_DIRECTIVE" &&
-          warning.message.includes(`"use client"`)
-        ) {
-          return;
+        if (warning.code === "MODULE_LEVEL_DIRECTIVE" && warning.message.includes(`"use client"`)) {
+          return
         }
-        warn(warning);
+        warn(warning)
       },
       // Add above code ~~~~
     },
   },
-});
+})
 ```
 
 </details>
@@ -222,10 +220,10 @@ export default defineConfig({
 <summary>src/pages/popup/Popup.tsx</summary>
 
 ```tsx
-import { Button } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react"
 
 export default function Popup() {
-  return <Button colorScheme="teal">Button</Button>;
+  return <Button colorScheme="teal">Button</Button>
 }
 ```
 
@@ -241,7 +239,7 @@ export default function Popup() {
 <summary>src/pages/content/ui/CustomChakraProvider.tsx</summary>
 
 ```tsx
-import { ReactNode, useCallback, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react"
 import {
   ColorMode,
   ColorModeContext,
@@ -249,40 +247,40 @@ import {
   CSSReset,
   extendTheme,
   GlobalStyle,
-  ThemeProvider
-} from "@chakra-ui/react";
+  ThemeProvider,
+} from "@chakra-ui/react"
 
-const theme = extendTheme();
+const theme = extendTheme()
 
 const getCurrentTheme = () => {
-  const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  return isDark ? "dark" : "light";
-};
+  const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+  return isDark ? "dark" : "light"
+}
 
 type CustomChakraProviderProps = {
-  shadowRootId: string;
-  children: ReactNode;
-};
+  shadowRootId: string
+  children: ReactNode
+}
 export default function CustomChakraProvider({ children, shadowRootId }: CustomChakraProviderProps) {
-  const [colorMode, setColorMode] = useState<ColorMode>(getCurrentTheme());
+  const [colorMode, setColorMode] = useState<ColorMode>(getCurrentTheme())
 
   useEffect(() => {
-    const darkThemeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const darkThemeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
     const onChangeColorSchema = (event: MediaQueryListEvent) => {
-      const isDark = event.matches;
-      setColorMode(isDark ? "dark" : "light");
-    };
+      const isDark = event.matches
+      setColorMode(isDark ? "dark" : "light")
+    }
 
-    darkThemeMediaQuery.addEventListener("change", onChangeColorSchema);
+    darkThemeMediaQuery.addEventListener("change", onChangeColorSchema)
 
     return () => {
-      darkThemeMediaQuery.removeEventListener("change", onChangeColorSchema);
-    };
-  }, []);
+      darkThemeMediaQuery.removeEventListener("change", onChangeColorSchema)
+    }
+  }, [])
 
   const toggleColorMode = useCallback(() => {
-    setColorMode(prev => (prev === "dark" ? "light" : "dark"));
-  }, []);
+    setColorMode(prev => (prev === "dark" ? "light" : "dark"))
+  }, [])
 
   return (
     <ThemeProvider theme={theme} cssVarsRoot={`#${shadowRootId}`}>
@@ -293,7 +291,7 @@ export default function CustomChakraProvider({ children, shadowRootId }: CustomC
         {children}
       </ColorModeContext.Provider>
     </ThemeProvider>
-  );
+  )
 }
 ```
 
@@ -302,12 +300,12 @@ export default function CustomChakraProvider({ children, shadowRootId }: CustomC
 <summary>src/pages/content/ui/EmotionCacheProvider.tsx</summary>
 
 ```tsx
-import createCache from '@emotion/cache';
-import { CacheProvider, type EmotionCache } from '@emotion/react';
-import { ReactNode, useEffect, useState } from 'react';
+import createCache from "@emotion/cache"
+import { CacheProvider, type EmotionCache } from "@emotion/react"
+import { ReactNode, useEffect, useState } from "react"
 
 export default function EmotionCacheProvider({ children, rootId }: { rootId: string; children: ReactNode }) {
-  const [emotionCache, setEmotionCache] = useState<EmotionCache | null>(null);
+  const [emotionCache, setEmotionCache] = useState<EmotionCache | null>(null)
 
   useEffect(() => {
     function setEmotionStyles(shadowRoot: ShadowRoot) {
@@ -316,16 +314,16 @@ export default function EmotionCacheProvider({ children, rootId }: { rootId: str
           key: rootId,
           container: shadowRoot,
         }),
-      );
+      )
     }
 
-    const root = document.getElementById(rootId);
+    const root = document.getElementById(rootId)
     if (root && root.shadowRoot) {
-      setEmotionStyles(root.shadowRoot);
+      setEmotionStyles(root.shadowRoot)
     }
-  }, []);
+  }, [])
 
-  return emotionCache ? <CacheProvider value={emotionCache}>{children}</CacheProvider> : null;
+  return emotionCache ? <CacheProvider value={emotionCache}>{children}</CacheProvider> : null
 }
 ```
 
@@ -337,8 +335,8 @@ export default function EmotionCacheProvider({ children, rootId }: { rootId: str
 <summary>src/pages/content/index.tsx</summary>
 
 ```tsx
-import CustomChakraProvider from '@pages/content/ui/CustomChakraProvider';
-import EmotionCacheProvider from '@pages/content/ui/EmotionCacheProvider';
+import CustomChakraProvider from "@pages/content/ui/CustomChakraProvider"
+import EmotionCacheProvider from "@pages/content/ui/EmotionCacheProvider"
 
 // ...
 
@@ -349,8 +347,7 @@ createRoot(rootIntoShadow).render(
       <App />
     </CustomChakraProvider>
   </EmotionCacheProvider>,
-);
-
+)
 ```
 
 </details>
@@ -399,7 +396,7 @@ manifest.json
 ### Popup <a name="popup"></a>
 
 | Black                                                                                                                                                          | White                                                                                                                                                          |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | <img width="300" alt="black" src="https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite/assets/53500778/35423617-e6f5-4f65-adb3-03f068236648"> | <img width="300" alt="white" src="https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite/assets/53500778/99886d92-b6f0-4e41-b70e-5afc6d2f7eab"> |
 
 ### Devtools <a name="devtools"></a>
@@ -488,7 +485,7 @@ manifest.json
 ## Thanks To
 
 | [Jetbrains](https://jb.gg/OpenSourceSupport)                                                                                               | [Jackson Hong](https://www.linkedin.com/in/j-acks0n/)                                            |
-|--------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
 | <img width="100" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main) logo."> | <img width="100" src='https://avatars.githubusercontent.com/u/23139754?v=4' alt='Jackson Hong'/> |
 
 ---

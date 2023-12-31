@@ -1,30 +1,30 @@
-import { Component, ComponentType, ReactElement } from 'react';
+import { Component, ComponentType, ReactElement } from "react"
 
 class ErrorBoundary extends Component<
   {
-    children: ReactElement;
-    fallback: ReactElement;
+    children: ReactElement
+    fallback: ReactElement
   },
   {
-    hasError: boolean;
+    hasError: boolean
   }
 > {
-  state = { hasError: false };
+  state = { hasError: false }
 
   static getDerivedStateFromError() {
-    return { hasError: true };
+    return { hasError: true }
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error(error, errorInfo);
+    console.error(error, errorInfo)
   }
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback;
+      return this.props.fallback
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }
 
@@ -37,6 +37,6 @@ export default function withErrorBoundary<T extends Record<string, unknown>>(
       <ErrorBoundary fallback={ErrorComponent}>
         <Component {...props} />
       </ErrorBoundary>
-    );
-  };
+    )
+  }
 }

@@ -1,24 +1,23 @@
-import { BaseStorage, createStorage, StorageType } from '@src/shared/storages/base';
+import { BaseStorage, createStorage, StorageType } from "@src/shared/storages/base"
 
-type Theme = 'light' | 'dark';
+type ChatGPTApiStorage = BaseStorage<string> & {
+  add: (key: string) => void
+  delete: () => void
+}
 
-type ThemeStorage = BaseStorage<Theme> & {
-  toggle: () => void;
-};
-
-const storage = createStorage<Theme>('theme-storage-key', 'light', {
+const storage = createStorage<string>("chatgpt-api-storage-key", "", {
   storageType: StorageType.Local,
   liveUpdate: true,
-});
+})
 
-const exampleThemeStorage: ThemeStorage = {
+const chatGPTApiStorage: ChatGPTApiStorage = {
   ...storage,
-  // TODO: extends your own methods
-  toggle: () => {
-    storage.set(currentTheme => {
-      return currentTheme === 'light' ? 'dark' : 'light';
-    });
+  add: (key: string) => {
+    storage.set(key)
   },
-};
+  delete: () => {
+    storage.set("")
+  },
+}
 
-export default exampleThemeStorage;
+export default chatGPTApiStorage
