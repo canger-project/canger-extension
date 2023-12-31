@@ -32,9 +32,10 @@ const disabledDomainStorage: disabledDomainStorage = {
       return currentDomain.filter(d => d !== domain)
     })
   },
-  exists: async (domain: string) => {
-    const disabledDomains = await storage.get()
-    return disabledDomains.includes(domain)
+  exists: (domain: string) => {
+    return storage.get().then(d => {
+      return d.includes(domain)
+    })
   },
 }
 

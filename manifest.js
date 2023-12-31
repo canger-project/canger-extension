@@ -11,9 +11,6 @@ const manifest = {
   description: packageJson.description,
   permissions: ["storage", "sidePanel", "tabs"],
   host_permissions: ["https://api.openai.com/"],
-  side_panel: {
-    default_path: "src/pages/sidepanel/index.html",
-  },
   options_page: "src/pages/options/index.html",
   background: {
     service_worker: "src/pages/background/index.js",

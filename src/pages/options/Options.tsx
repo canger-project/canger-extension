@@ -22,7 +22,7 @@ import useStorage from "@root/src/shared/hooks/useStorage"
 import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStorage"
 import { IconTrash } from "@tabler/icons-react"
 import { Routes, Route, Outlet, Link, useLocation } from "react-router-dom"
-import chatGPTApiStorage from "@root/src/shared/storages/exampleThemeStorage"
+import chatGPTApiStorage from "@root/src/shared/storages/chatGPTStorage"
 
 const ROUTER_MAP = new Map([
   ["/", "设置"],

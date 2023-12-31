@@ -1,6 +1,6 @@
 import reloadOnUpdate from "virtual:reload-on-update-in-background-script"
 import "webextension-polyfill"
-import chatGPTApiStorage from "@root/src/shared/storages/exampleThemeStorage"
+import chatGPTApiStorage from "@root/src/shared/storages/chatGPTStorage"
 
 const BG_PREFIX = "[background]"
 const CHATGPT_API = "https://api.openai.com/v1/chat/completions"
@@ -15,13 +15,29 @@ reloadOnUpdate("pages/content/style.scss")
 
 console.info(`${BG_PREFIX} loaded :)`)
 
+interface Request {
+  type: "chatgpt" | "taburl"
+  message: object
+}
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.info(`${BG_PREFIX} receive message: ${request}`)
-  if (request.sentence != "") {
-    askChatGPT(request.sentence, request.kind).then(res => {
-      console.info(`${BG_PREFIX} ChatGPT result: ${res}`)
-      sendResponse({ result: res })
-    })
+
+  switch (request.type) {
+    case "chatgpt":
+      askChatGPT(request.message.sentence, request.message.kind).then(res => {
+        console.info(`${BG_PREFIX} ChatGPT result: ${res}`)
+        sendResponse({ result: res })
+      })
+      break
+    case "taburl":
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        sendResponse({ result: tabs[0].url })
+      })
+      break
+    default:
+      sendResponse({ result: "I'm groot." })
+      break
   }
 
   return true
@@ -52,11 +68,12 @@ const PROMPTS: Prompt[] = [
 
 // ask ChatGPT
 const askChatGPT = async (sentence: string, kind: PromptKind) => {
+  const key = await chatGPTApiStorage.get()
   const response = await fetch(CHATGPT_API, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${chatGPTApiStorage.get()}`,
+      Authorization: `Bearer ${key}`,
     },
     body: JSON.stringify({
       model: "gpt-3.5-turbo",

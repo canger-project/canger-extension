@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react"
+import React, { ChangeEvent , useState , useEffect } from "react"
 import "@pages/popup/Popup.css"
 import useStorage from "@src/shared/hooks/useStorage"
 import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStorage"
@@ -9,11 +9,33 @@ import { Box, Text, Flex, Switch, FormLabel, FormControl, Divider, Heading, Link
 
 const Popup: React.FC = () => {
   const disabledDomain = useStorage(disabledDomainStorage)
-  const currentDomain = ""
+  const [currentDomain, setCurrentDomain] = useState("")
+  const [allow, setAllow] = useState(true)
+
+  useEffect(() => {
+    chrome.runtime.sendMessage({ type: "taburl", message: "" }, function (response) {
+      const currentDomain = response.result
+
+      setCurrentDomain(currentDomain)
+
+      if (disabledDomain.includes(currentDomain)) {
+        setAllow(false)
+      }
+    })
+  }, [])
 
   const handleToggle = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
-    event.target.checked ? disabledDomainStorage.add(currentDomain) : disabledDomainStorage.remove(currentDomain)
+    chrome.runtime.sendMessage({ type: "taburl", message: "" }, function (response) {
+      const currentDomain = response.result
+      if (event.target.checked) {
+        disabledDomainStorage.add(currentDomain)
+        setAllow(false)
+      } else {
+        disabledDomainStorage.remove(currentDomain)
+        setAllow(true)
+      }
+    })
   }
 
   const checkDomainExisted = async () => {
@@ -53,21 +75,11 @@ const Popup: React.FC = () => {
               <Icon as={IconExternalLink} />
             </Link>
           </FormLabel>
-          <Switch id="canger-domain-allow" onChange={handleToggle} />
+          <Switch id="canger-domain-allow" onChange={handleToggle} isChecked={allow} />
         </FormControl>
       </Box>
     </Box>
   )
-}
-
-function getCurrentTabUrl() {
-  return getCurrentTab().then(tab => tab.url)
-}
-
-async function getCurrentTab() {
-  const queryOptions = { active: true, lastFocusedWindow: true }
-  const [tab] = await chrome.tabs.query(queryOptions)
-  return tab
 }
 
 export default withErrorBoundary(withSuspense(Popup, <div> Loading ... </div>), <div> Error Occur </div>)

@@ -1,6 +1,6 @@
 import React from "react"
 import { createRoot } from "react-dom/client"
-import { Options, DisabledDomain } from "@pages/options/Options"
+import { Options } from "@pages/options/Options"
 import "@pages/options/index.css"
 import refreshOnUpdate from "virtual:reload-on-update-in-view"
 import { ChakraProvider } from "@chakra-ui/react"

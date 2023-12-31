@@ -1,4 +1,7 @@
-import { IconSignature, IconTransform, IconX } from "@tabler/icons-react"
+import { useState } from "react"
+import { IconSignature, IconX } from "@tabler/icons-react"
+import useStorage from "@root/src/shared/hooks/useStorage"
+import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStorage"
 
 export default function Container(props: { textarea: HTMLTextAreaElement }) {
   const { textarea } = props
@@ -9,7 +12,7 @@ export default function Container(props: { textarea: HTMLTextAreaElement }) {
         position: "absolute",
         top: areaRect.top + "px",
         left: areaRect.left + "px",
-        zIndex: 9999999,
+        zIndex: 999999,
       }}>
       <Btn textarea={textarea} />
     </div>
@@ -17,35 +20,51 @@ export default function Container(props: { textarea: HTMLTextAreaElement }) {
 }
 
 function Btn(props: { textarea: HTMLTextAreaElement }) {
+  const [thinking, setThinking] = useState(false)
   const { textarea } = props
   const areaRect = textarea.getBoundingClientRect()
+  const disabledDomain = useStorage(disabledDomainStorage)
 
   const handleClick = (e, kind) => {
-    chrome.runtime.sendMessage({ sentence: textarea.value, kind: kind }, function (response) {
-      console.debug(`content-script received: `, response.result)
-      textarea.value = response.result
+    setThinking(true)
+    chrome.runtime.sendMessage(
+      { type: "chatgpt", message: { sentence: textarea.value, kind: kind } },
+      function (response) {
+        setThinking(false)
+        textarea.value = response.result
+      },
+    )
+  }
+
+  function handleCloseBtn() {
+    chrome.runtime.sendMessage({ type: "taburl", message: "" }, function (response) {
+      disabledDomainStorage.add(response.result)
+      const cangerRoot = document.getElementById("canger-root")
+      cangerRoot.remove()
     })
   }
+
   return (
     <div
       className="canger-btn"
       style={{
         position: "relative",
         top: areaRect.height - 38 + "px",
-        left: areaRect.width - 94 + "px",
+        left: areaRect.width - 70 + "px",
       }}>
-      <button id="canger-close">
+      <button id="canger-close" onClick={handleCloseBtn}>
         <IconX size={24} />
         <span className="tooltip">关闭</span>
       </button>
-      <button id="canger-writing" onClick={e => handleClick(e, "writer")}>
-        <IconSignature size={24} />
-        <span className="tooltip">续写</span>
-      </button>
-      <button id="canger-trans" onClick={e => handleClick(e, "translator")}>
-        <IconTransform size={24} />
-        <span className="tooltip">翻译</span>
-      </button>
+
+      {thinking ? (
+        <span className="loader"></span>
+      ) : (
+        <button id="canger-trans" onClick={e => handleClick(e, "translator")}>
+          <IconSignature size={24} />
+          <span className="tooltip">翻译+优化</span>
+        </button>
+      )}
     </div>
   )
 }

@@ -30,7 +30,6 @@ function injectCangerBtn() {
 
 function attachCanger(textarea: HTMLTextAreaElement) {
   const container = document.getElementById("canger-root").shadowRoot.getElementById("canger-input-container")
-  console.info(container)
   createRoot(container).render(<Container textarea={textarea} />)
 }
 
