@@ -2,7 +2,7 @@
   "name": "canger",
   "version": "0.0.1",
   "description": "随时随地，在潜移默化中掌握英语。",
-  "license": "GPL",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/ischaojie/canger-extension.git"
