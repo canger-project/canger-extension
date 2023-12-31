@@ -119,7 +119,7 @@ function DisabledDomain() {
   const toast = useToast()
 
   return (
-    <Card>
+    <Card id="disabled-domain">
       <CardHeader>
         <Heading size="md">设置需过滤的域名</Heading>
       </CardHeader>

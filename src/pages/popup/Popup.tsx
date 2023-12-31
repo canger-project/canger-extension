@@ -1,4 +1,4 @@
-import React, { ChangeEvent , useState , useEffect } from "react"
+import React, { ChangeEvent, useState, useEffect } from "react"
 import "@pages/popup/Popup.css"
 import useStorage from "@src/shared/hooks/useStorage"
 import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStorage"
@@ -38,10 +38,6 @@ const Popup: React.FC = () => {
     })
   }
 
-  const checkDomainExisted = async () => {
-    return await disabledDomainStorage.exists(currentDomain)
-  }
-
   const handleSettings = event => {
     event.preventDefault()
 
@@ -70,7 +66,7 @@ const Popup: React.FC = () => {
         <FormControl display="flex" alignItems="center" justifyContent="space-between">
           <FormLabel htmlFor="canger-domain-allow" mb="0">
             <Heading size="sm">允许在该网站运行</Heading>
-            <Link fontSize="xs" isExternal display={"flex"} alignItems={"center"}>
+            <Link fontSize="xs" isExternal display={"flex"} alignItems={"center"} onClick={handleSettings}>
               设置更多网站
               <Icon as={IconExternalLink} />
             </Link>
