@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { createRoot } from "react-dom/client"
 import Container from "./Container"
-
+import { DEFAULT_DOMAINS_SELECTOR, DOMAINS_SELECTOR } from "./const"
 const CONTENT_PREFIX = "[content-script]"
 
 export default function App() {
@@ -15,13 +15,25 @@ export default function App() {
 }
 
 // 注入翻译
-function injectCangerTrans() {
-  const eleShowTransBtn = ["p", "li", "h1", "h2", "h3", "h4", "h5", "h6"]
-  const allEle = document.querySelectorAll(eleShowTransBtn.join(", "))
+async function injectCangerTrans() {
+  let selectors = DEFAULT_DOMAINS_SELECTOR
+  let currentDomain = ""
+
+  const resp = await chrome.runtime.sendMessage({ type: "taburl", message: "" })
+  currentDomain = resp.result
+  for (let i = 0; i < DOMAINS_SELECTOR.length; i++) {
+    const domain = DOMAINS_SELECTOR[i]
+    if (currentDomain.match(domain.pattern) != null) {
+      selectors = domain.selectors
+      break
+    }
+  }
+  const allEle = document.querySelectorAll(selectors.join(", "))
   allEle.forEach(ele => {
     ele.addEventListener("mouseenter", event => {
-      attachCanger(ele as HTMLElement, "trans")
-      console.info(`${CONTENT_PREFIX} attach canger to ${ele.tagName}`)
+      setTimeout(() => {
+        attachCanger(ele as HTMLElement, "trans")
+      }, 200)
     })
   })
 }

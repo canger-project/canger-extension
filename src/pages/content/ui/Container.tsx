@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { IconSignature, IconX } from "@tabler/icons-react"
+import { IconSignature, IconX, IconTransformFilled } from "@tabler/icons-react"
 import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStorage"
 
 export default function Container(props: { ele: HTMLElement; type: "input" | "trans" }) {
@@ -52,7 +52,7 @@ function TransBtn(props: { ele: HTMLElement }) {
         <span className="loader"></span>
       ) : (
         <button onClick={handleClick}>
-          <IconSignature size={24} />
+          <IconTransformFilled size={24} />
           <span className="tooltip">翻译</span>
         </button>
       )}
