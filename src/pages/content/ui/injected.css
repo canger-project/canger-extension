@@ -11,12 +11,26 @@
   box-shadow: 0px 0px 12px 2px rgba(0, 0, 0, 0.1);
 }
 
-.canger-btn button {
+.canger-trans-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50px;
+  padding: 2px 2px;
+  border: solid 1px #f3f4f6;
+  background-color: white;
+  text-align: center;
+  box-shadow: 0px 0px 12px 2px rgba(0, 0, 0, 0.1);
+}
+
+button {
   position: relative;
   width: 24px;
   height: 24px;
   border: none;
-  border-radius: 50%;
+  border-radius: 50px;
   color: #1f2937;
   background-color: white;
   margin: 0 2px;
@@ -25,12 +39,12 @@
   align-items: center;
 }
 
-.canger-btn button:hover {
+button:hover {
   background-color: #1f2937;
   color: white;
 }
 
-.canger-btn button .tooltip {
+.tooltip {
   visibility: hidden;
   width: 80px;
   background-color: #1f2937;
@@ -46,7 +60,7 @@
   margin-bottom: 6px;
 }
 
-.canger-btn button .tooltip::after {
+.tooltip::after {
   content: "";
   position: absolute;
   top: 100%;
@@ -57,7 +71,7 @@
   border-color: black transparent transparent transparent;
 }
 
-.canger-btn button:hover .tooltip {
+button:hover .tooltip {
   visibility: visible;
 }
 /* loader spinner */
