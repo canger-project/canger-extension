@@ -7,8 +7,10 @@ const CONTENT_PREFIX = "[content-script]"
 export default function App() {
   useEffect(() => {
     console.info(`${CONTENT_PREFIX} loaded :)`)
-    injectCangerTrans()
-    injectCangerInput()
+    if (document.documentElement.lang === "en") {
+      injectCangerTrans()
+      injectCangerInput()
+    }
   }, [])
 
   return <div className=""></div>
@@ -40,7 +42,6 @@ async function injectCangerTrans() {
 
 // 注入写作
 function injectCangerInput() {
-  if (document.documentElement.lang != "en") return
   // TODO: 已忽略域名跳过
 
   const allTextarea = document.querySelectorAll("textarea")

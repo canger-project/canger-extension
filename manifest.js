@@ -18,7 +18,7 @@ const manifest = {
   },
   action: {
     default_popup: "src/pages/popup/index.html",
-    default_icon: "icon32.png",
+    default_icon: "icon128.png",
   },
   icons: {
     16: "icon16.png",
