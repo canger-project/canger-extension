@@ -1,5 +1,5 @@
 <div align="center">
-<img src="public/icons/icon128.png" alt="logo"/>
+<img src="public/icon128.png" alt="logo"/>
 <h1>苍耳英语</h1>
 
 ![](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)
@@ -12,11 +12,13 @@
 </div>
 
 ## 介绍
-这里是苍耳的浏览器插件代码仓库。
+这里是苍耳的浏览器插件工具。在你阅读英语文章时，它可以帮助你快速的翻译单词和句子，在你回复帖子时，它可以帮助你翻译为英文并不断优化你的表达。
 
 ## 特点
-- 划词翻译，段落翻译。
-- 上下文输入辅助翻译和优化，方便你的沟通交流。
+
+- [ ] 划词翻译
+- [x] 段落翻译
+- [x] 文本输入时辅助翻译和优化
 
 ## 安装
 
