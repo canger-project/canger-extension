@@ -15,11 +15,6 @@ reloadOnUpdate("pages/content/style.scss")
 
 console.info(`${BG_PREFIX} loaded :)`)
 
-interface Request {
-  type: "chatgpt" | "taburl"
-  message: object
-}
-
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.info(`${BG_PREFIX} receive message: ${request}`)
 
@@ -52,7 +47,7 @@ interface Prompt {
 
 const PROMPTS: Prompt[] = [
   {
-    kind: "translator",
+    kind: "writer",
     prompt: `I want you to act as an English translator, spelling corrector and improver.
         I will speak to you in any language and you will detect the language,
         translate it and answer in the corrected and improved version of my text, in English.
@@ -61,8 +56,9 @@ const PROMPTS: Prompt[] = [
         I want you to only reply the correction, the improvements and nothing else, do not write explanations. My first sentence is: `,
   },
   {
-    kind: "writer",
-    prompt: `hello`,
+    kind: "translator",
+    prompt: `I want you to act as an Language translator, I will speak to you in English language and you will detect the language,
+    translate it to Chinese. I want you to only reply the correction, do not write explanations. My sentence is:`,
   },
 ]
 
