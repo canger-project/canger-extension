@@ -7,7 +7,7 @@ refreshOnUpdate("pages/content")
 
 const root = document.createElement("div")
 root.id = "canger-root"
-document.body.append(root)
+document.body ? document.body.append(root) : document.documentElement.append(root)
 
 const rootIntoShadow = document.createElement("div")
 rootIntoShadow.id = "canger-input-container"
@@ -28,3 +28,7 @@ shadowRoot.appendChild(styleElement)
  */
 
 createRoot(rootIntoShadow).render(<App />)
+
+// Toggle the color mode
+const colorSchema = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+chrome.runtime.sendMessage({ type: "colormode", message: colorSchema })

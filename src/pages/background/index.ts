@@ -30,6 +30,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         sendResponse({ result: tabs[0].url })
       })
       break
+    case "colormode":
+      chrome.action.setIcon({
+        path: request.message === "dark" ? "/icons/iconDark128.png" : "/icons/icon128.png",
+      })
+      break
     default:
       sendResponse({ result: "I'm groot." })
       break
