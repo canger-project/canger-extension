@@ -5,7 +5,7 @@ import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStora
 import withSuspense from "@src/shared/hoc/withSuspense"
 import withErrorBoundary from "@src/shared/hoc/withErrorBoundary"
 import { IconSettings, IconExternalLink } from "@tabler/icons-react"
-import { Box, Text, Flex, Switch, FormLabel, FormControl, Divider, Heading, Link, Icon } from "@chakra-ui/react"
+import { Box, Text, Flex, Switch, FormLabel, FormControl, Divider, Heading, Link, Icon, Image } from "@chakra-ui/react"
 
 const Popup: React.FC = () => {
   const disabledDomain = useStorage(disabledDomainStorage)
@@ -51,13 +51,17 @@ const Popup: React.FC = () => {
   return (
     <Box>
       <Flex m="2" alignItems={"center"} justifyContent={"space-between"}>
-        <Text fontSize="xl">苍耳英语</Text>
+        <Flex alignItems="center">
+          <Image src="/logo.svg" boxSize={6} />
+          <Text fontSize="md">苍耳</Text>
+        </Flex>
         <Icon
           as={IconSettings}
           boxSize={6}
           onClick={handleSettings}
+          color="#1e293b"
           _hover={{
-            color: "red",
+            color: "#020617",
           }}
         />
       </Flex>
@@ -65,7 +69,7 @@ const Popup: React.FC = () => {
       <Box m="2" pb="2">
         <FormControl display="flex" alignItems="center" justifyContent="space-between">
           <FormLabel htmlFor="canger-domain-allow" mb="0">
-            <Heading size="sm">允许在该网站运行</Heading>
+            <Text size="sm">允许在该网站运行</Text>
             <Link fontSize="xs" isExternal display={"flex"} alignItems={"center"} onClick={handleSettings}>
               设置更多网站
               <Icon as={IconExternalLink} />

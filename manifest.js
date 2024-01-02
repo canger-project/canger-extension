@@ -18,13 +18,13 @@ const manifest = {
   },
   action: {
     default_popup: "src/pages/popup/index.html",
-    default_icon: "icon128.png",
+    default_icon: "icons/icon128.png",
   },
   icons: {
-    16: "icon16.png",
-    32: "icon32.png",
-    48: "icon48.png",
-    128: "icon128.png",
+    16: "icons/icon16.png",
+    32: "icons/icon32.png",
+    48: "icons/icon48.png",
+    128: "icons/icon128.png",
   },
   content_scripts: [
     {
@@ -37,7 +37,14 @@ const manifest = {
   ],
   web_accessible_resources: [
     {
-      resources: ["assets/js/*.js", "assets/css/*.css", "icon16.png", "icon32.png", "icon48.png", "icon128.png"],
+      resources: [
+        "assets/js/*.js",
+        "assets/css/*.css",
+        "icons/icon16.png",
+        "icons/icon32.png",
+        "icons/icon48.png",
+        "icons/icon128.png",
+      ],
       matches: ["*://*/*"],
     },
   ],

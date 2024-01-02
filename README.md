@@ -1,5 +1,5 @@
 <div align="center">
-<img src="public/icon128.png" alt="logo"/>
+<img src="public/icons/icon128.png" alt="logo"/>
 <h1>苍耳英语</h1>
 
 ![](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)
