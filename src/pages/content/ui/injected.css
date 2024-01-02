@@ -31,7 +31,7 @@ button {
   height: 24px;
   border: none;
   border-radius: 50px;
-  color: #1f2937;
+  color: #1e293b;
   background-color: white;
   margin: 0 2px;
   text-align: center;
@@ -40,14 +40,14 @@ button {
 }
 
 button:hover {
-  background-color: #1f2937;
+  background-color: #1e293b;
   color: white;
 }
 
 .tooltip {
   visibility: hidden;
   width: 80px;
-  background-color: #1f2937;
+  background-color: #1e293b;
   color: #fff;
   text-align: center;
   border-radius: 6px;
@@ -78,7 +78,7 @@ button:hover .tooltip {
 .loader {
   width: 18px;
   height: 18px;
-  border: 3px dotted #1f2937;
+  border: 3px dotted #1e293b;
   border-radius: 50%;
   display: inline-block;
   position: relative;
