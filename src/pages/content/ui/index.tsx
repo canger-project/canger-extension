@@ -12,9 +12,18 @@ document.body ? document.body.append(root) : document.documentElement.append(roo
 const rootIntoShadow = document.createElement("div")
 rootIntoShadow.id = "canger-input-container"
 
+const transContainerEle = document.createElement("div")
+transContainerEle.id = "canger-trans-container"
+
+const transPanelContainerEle = document.createElement("div")
+transPanelContainerEle.id = "canger-trans-panel-container"
+
 // create shadow root
 const shadowRoot = root.attachShadow({ mode: "open" })
 shadowRoot.appendChild(rootIntoShadow)
+shadowRoot.appendChild(transContainerEle)
+shadowRoot.appendChild(transPanelContainerEle)
+
 // append style
 const styleElement = document.createElement("style")
 styleElement.innerHTML = injectedStyle
@@ -27,7 +36,7 @@ shadowRoot.appendChild(styleElement)
  * Please refer to the PR link above and go back to the contentStyle.css implementation, or raise a PR if you have a better way to improve it.
  */
 
-createRoot(rootIntoShadow).render(<App />)
+createRoot(root).render(<App />)
 
 // Toggle the color mode
 const colorSchema = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"

@@ -29,8 +29,8 @@ jobs:
           cache: "pnpm"
       - name: Package the extension for Chrome
         run: |
-            pnpm build
-            zip -r canger-chrome-${{ github.ref_name }}.zip dist
+          pnpm build
+          zip -r canger-chrome-${{ github.ref_name }}.zip dist
         # TODO: support buid for firefox
       - name: Upload file
         uses: xresloader/upload-to-github-release@v1

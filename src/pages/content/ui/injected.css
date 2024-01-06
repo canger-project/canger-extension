@@ -94,3 +94,34 @@ button:hover .tooltip {
     transform: rotate(360deg);
   }
 }
+
+.word-panel {
+  width: 280px;
+  padding: 12px;
+  border-radius: 12px;
+  border: solid 1px #f3f4f6;
+  background-color: white;
+  box-shadow: 0px 0px 12px 2px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+.word-panel .word {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.word-panel .phonetic {
+  display: flex;
+  font-size: 12px;
+  color: #64748b;
+  margin: 12px 0;
+}
+.word-panel .phonetic span {
+  display: flex;
+  align-items: center;
+  margin-right: 6px;
+}
+
+.word-panel .phonetic span :hover {
+  color: #ef4444;
+}
