@@ -1,11 +1,11 @@
-import React, { ChangeEvent, useState, useEffect } from "react"
+import { Box, Divider, Flex, FormControl, FormLabel, Icon, Image, Link, Switch, Text } from "@chakra-ui/react"
 import "@pages/popup/Popup.css"
-import useStorage from "@src/shared/hooks/useStorage"
 import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStorage"
-import withSuspense from "@src/shared/hoc/withSuspense"
 import withErrorBoundary from "@src/shared/hoc/withErrorBoundary"
-import { IconSettings, IconExternalLink } from "@tabler/icons-react"
-import { Box, Text, Flex, Switch, FormLabel, FormControl, Divider, Heading, Link, Icon, Image } from "@chakra-ui/react"
+import withSuspense from "@src/shared/hoc/withSuspense"
+import useStorage from "@src/shared/hooks/useStorage"
+import { IconExternalLink, IconSettings } from "@tabler/icons-react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 
 const Popup: React.FC = () => {
   const disabledDomain = useStorage(disabledDomainStorage)

@@ -1,8 +1,8 @@
+import youdaoStorage from "@root/src/shared/storages/YoudaoStorage"
+import chatGPTApiStorage from "@root/src/shared/storages/chatGPTStorage"
 import CryptoJS from "crypto-js"
 import reloadOnUpdate from "virtual:reload-on-update-in-background-script"
 import "webextension-polyfill"
-import chatGPTApiStorage from "@root/src/shared/storages/chatGPTStorage"
-import youdaoStorage from "@root/src/shared/storages/YoudaoStorage"
 
 const BG_PREFIX = "[background]"
 const CHATGPT_API = "https://api.openai.com/v1/chat/completions"
@@ -17,6 +17,10 @@ reloadOnUpdate("pages/background")
 reloadOnUpdate("pages/content/style.scss")
 
 console.info(`${BG_PREFIX} loaded :)`)
+
+chrome.runtime.onInstalled.addListener(function () {
+  chrome.runtime.openOptionsPage()
+})
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.info(`${BG_PREFIX} receive message: ${request.message}`)

@@ -15,6 +15,6 @@ export const DOMAINS_SELECTOR: DomainSelector[] = [
   },
   {
     pattern: "https://github.com/*",
-    selectors: ["task-lists p"],
+    selectors: ["task-lists p", "p"],
   },
 ]

@@ -1,5 +1,5 @@
-import { useSyncExternalStore } from "react"
 import { BaseStorage } from "@src/shared/storages/base"
+import { useSyncExternalStore } from "react"
 
 type WrappedPromise = ReturnType<typeof wrapPromise>
 const storageMap: Map<BaseStorage<unknown>, WrappedPromise> = new Map()
