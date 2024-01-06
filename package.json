@@ -66,6 +66,7 @@
     "lint-staged": "15.0.2",
     "npm-run-all": "4.1.5",
     "prettier": "3.1.0",
+    "prettier-plugin-organize-imports": "^3.2.4",
     "rollup": "4.3.0",
     "sass": "1.69.5",
     "ts-loader": "9.5.0",
@@ -88,7 +89,10 @@
     "arrowParens": "avoid",
     "printWidth": 120,
     "bracketSameLine": true,
-    "htmlWhitespaceSensitivity": "strict"
+    "htmlWhitespaceSensitivity": "strict",
+    "plugins": [
+      "prettier-plugin-organize-imports"
+    ]
   },
   "packageManager": "pnpm@8.9.2"
 }

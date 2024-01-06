@@ -1,9 +1,8 @@
-import React from "react"
-import { createRoot } from "react-dom/client"
-import "@pages/popup/index.css"
+import { ChakraProvider, theme as chakraTheme, extendBaseTheme } from "@chakra-ui/react"
 import Popup from "@pages/popup/Popup"
+import "@pages/popup/index.css"
+import { createRoot } from "react-dom/client"
 import refreshOnUpdate from "virtual:reload-on-update-in-view"
-import { ChakraBaseProvider, ChakraProvider, extendBaseTheme, theme as chakraTheme } from "@chakra-ui/react"
 
 refreshOnUpdate("pages/popup")
 

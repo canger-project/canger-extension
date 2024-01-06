@@ -1,10 +1,10 @@
 import * as fs from "fs"
 import * as path from "path"
+import * as process from "process"
+import url from "url"
+import type { PluginOption } from "vite"
 import colorLog from "../log"
 import ManifestParser from "../manifest-parser"
-import type { PluginOption } from "vite"
-import url from "url"
-import * as process from "process"
 
 const { resolve } = path
 

@@ -1,10 +1,9 @@
-import { useState , useEffect } from "react"
-import { IconSignature, IconX, IconTransformFilled } from "@tabler/icons-react"
 import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStorage"
-import WordPanel from "./components/WordPanel"
+import { IconSignature, IconTransformFilled, IconX } from "@tabler/icons-react"
+import { useState } from "react"
 import { createRoot } from "react-dom/client"
-import { position } from "@chakra-ui/react"
-import { getSelectionPosition, isValidWord } from "./utils"
+import WordPanel from "./components/WordPanel"
+import { getSelectionPosition } from "./utils"
 
 export function Container(props: { ele: HTMLElement; type: "input" | "trans" }) {
   const { ele, type } = props
