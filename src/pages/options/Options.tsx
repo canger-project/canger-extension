@@ -30,6 +30,7 @@ import { Routes, Route, Outlet, Link, useLocation } from "react-router-dom"
 import chatGPTApiStorage from "@root/src/shared/storages/chatGPTStorage"
 import brand from "@assets/img/brand.jpg"
 import logo from "@assets/img/logo.svg"
+import youdaoStorage from "@root/src/shared/storages/YoudaoStorage"
 
 const ROUTER_MAP = new Map([
   ["/", "设置"],
@@ -54,9 +55,23 @@ const Layout: React.FC = () => {
   const location = useLocation()
 
   return (
-    <Grid gap={8} templateColumns="repeat(5, 1fr)" h={"200px"}>
-      <GridItem rowSpan={2} colSpan={1} colStart={2} colEnd={3}>
-        <Flex alignItems="center" justifyContent="center" gap="2" mb="12px">
+    <Grid gap={8} templateColumns="repeat(6, 1fr)">
+      <GridItem
+        rowSpan={2}
+        colSpan={2}
+        py="2"
+        style={{
+          position: "fixed",
+          top: 0,
+          bottom: 0,
+          left: 0,
+          width: "240px",
+          overflowY: "auto",
+          backgroundColor: "#fff",
+          boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+          zIndex: 1,
+        }}>
+        <Flex alignItems="center" justifyContent="center" gap="2" my="6">
           <Image src={logo} alt="canger" boxSize="32px" />
           <Text fontSize={"xl"}>苍耳 Canger</Text>
         </Flex>
@@ -64,9 +79,9 @@ const Layout: React.FC = () => {
           direction={"column"}
           justifyContent="space-between"
           style={{
-            minHeight: "calc(100vh - 120px)",
+            height: "calc(100vh - 120px)",
           }}>
-          <Box display="flex" flexDirection="column" gap="2">
+          <Box display="flex" flexDirection="column" gap="2" mx="4" my="2">
             <Button>
               <Link to={`/`}>设置</Link>
             </Button>
@@ -81,7 +96,7 @@ const Layout: React.FC = () => {
         </Flex>
       </GridItem>
 
-      <GridItem colSpan={2} colStart={3} colEnd={5} pl="2">
+      <GridItem colSpan={3} colStart={3} colEnd={6} pl="2">
         <Text fontSize={"xl"}>{ROUTER_MAP.get(location.pathname)}</Text>
         <Divider my="4" />
         <Outlet />
@@ -94,7 +109,9 @@ function Settings() {
   return (
     <Flex gap="4" direction="column">
       <ChatGPT />
+      <Youdao />
       <DisabledDomain />
+      {/* TODO: 是否过滤中文网站 */}
     </Flex>
   )
 }
@@ -125,6 +142,59 @@ function ChatGPT() {
         <FormControl>
           <FormLabel>ChatGPT API Key</FormLabel>
           <Input type="text" value={chatgptapi} onChange={handleKeyInput} />
+          <FormHelperText>We will never share your key.</FormHelperText>
+        </FormControl>
+      </CardBody>
+    </Card>
+  )
+}
+
+function Youdao() {
+  const youdao = useStorage(youdaoStorage)
+  const toast = useToast()
+
+  function handleSecretInput(e: React.ChangeEvent<HTMLInputElement>) {
+    e.preventDefault()
+
+    youdaoStorage.add({ appId: youdao.appScrect, appScrect: e.target.value })
+
+    toast({
+      title: `已保存`,
+      position: "top",
+      status: "success",
+      duration: 1000,
+      isClosable: true,
+    })
+  }
+
+  function handleIDInput(e: React.ChangeEvent<HTMLInputElement>) {
+    e.preventDefault()
+
+    youdaoStorage.add({ appId: e.target.value, appScrect: youdao.appScrect })
+
+    toast({
+      title: `已保存`,
+      position: "top",
+      status: "success",
+      duration: 1000,
+      isClosable: true,
+    })
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <Heading size="md">设置有道词典</Heading>
+      </CardHeader>
+      <CardBody>
+        <FormControl>
+          <FormLabel>App ID</FormLabel>
+          <Input type="text" value={youdao.appId} onChange={handleIDInput} />
+          <FormHelperText>We will never share your key.</FormHelperText>
+        </FormControl>
+        <FormControl>
+          <FormLabel>App Secret</FormLabel>
+          <Input type="text" value={youdao.appScrect} onChange={handleSecretInput} />
           <FormHelperText>We will never share your key.</FormHelperText>
         </FormControl>
       </CardBody>

@@ -1,9 +1,12 @@
+import CryptoJS from "crypto-js"
 import reloadOnUpdate from "virtual:reload-on-update-in-background-script"
 import "webextension-polyfill"
 import chatGPTApiStorage from "@root/src/shared/storages/chatGPTStorage"
+import youdaoStorage from "@root/src/shared/storages/YoudaoStorage"
 
 const BG_PREFIX = "[background]"
 const CHATGPT_API = "https://api.openai.com/v1/chat/completions"
+const YOUDAO_API = "https://openapi.youdao.com/api"
 
 reloadOnUpdate("pages/background")
 
@@ -16,7 +19,7 @@ reloadOnUpdate("pages/content/style.scss")
 console.info(`${BG_PREFIX} loaded :)`)
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.info(`${BG_PREFIX} receive message: ${request}`)
+  console.info(`${BG_PREFIX} receive message: ${request.message}`)
 
   switch (request.type) {
     case "chatgpt":
@@ -35,6 +38,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         path: request.message === "dark" ? "/icons/iconDark128.png" : "/icons/icon128.png",
       })
       break
+    case "dictionary":
+      getDictionary(request.message).then(res => {
+        console.info(`${BG_PREFIX} dictionary result: ${res.errorCode}`)
+        sendResponse({ result: res })
+      })
+      break
     default:
       sendResponse({ result: "I'm groot." })
       break
@@ -43,7 +52,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   return true
 })
 
-type PromptKind = "translator" | "writer"
+type PromptKind = "translator" | "writer" | "dictionary"
 
 interface Prompt {
   kind: PromptKind
@@ -86,4 +95,32 @@ const askChatGPT = async (sentence: string, kind: PromptKind) => {
     console.error(err)
   })
   return data.choices[0].message.content
+}
+async function getDictionary(word: string) {
+  const appKey = (await youdaoStorage.get()).appId
+  const key = (await youdaoStorage.get()).appScrect
+  const salt = new Date().getTime()
+  const curtime = Math.round(new Date().getTime() / 1000)
+  const sign = CryptoJS.SHA256(appKey + word + salt + curtime + key).toString(CryptoJS.enc.Hex)
+
+  const params = new Map([
+    ["q", word],
+    ["from", "auto"],
+    ["to", "zh-CHS"],
+    ["appKey", appKey],
+    ["salt", salt.toString()],
+    ["sign", sign],
+    ["signType", "v3"],
+    ["curtime", curtime.toString()],
+  ])
+  const url = new URL(YOUDAO_API)
+  params.forEach((value, key) => {
+    url.searchParams.append(key, value)
+  })
+  return await fetch(url.toString(), {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then(res => res.json())
 }
