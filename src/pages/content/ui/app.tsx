@@ -1,9 +1,9 @@
 import { useEffect } from "react"
 import { createRoot } from "react-dom/client"
 import { Container, ContainerM } from "./Container"
-import { DoubanContentFlow } from "./ContentFlow/Douban"
 import HighLight from "./components/HighLight"
 import { DEFAULT_DOMAINS_SELECTOR, DOMAINS_SELECTOR } from "./const"
+import { DoubanContentFlow } from "./contentFlow/Douban"
 import { isValidWord } from "./utils"
 
 export default function App() {
@@ -105,7 +105,7 @@ function injectTransInput() {
 
 // 注入内容流生词
 function injectContentFlow() {
-  document.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("load", () => {
     chrome.runtime.sendMessage({ type: "taburl", message: "" }, resp => {
       const currentDomain = resp.result
       const hostname = new URL(currentDomain).hostname
