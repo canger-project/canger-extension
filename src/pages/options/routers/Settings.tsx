@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react"
 import useStorage from "@root/src/shared/hooks/useStorage"
 import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStorage"
+import wordflowStorage from "@root/src/shared/storages/WordFlowStorage"
 import youdaoStorage from "@root/src/shared/storages/YoudaoStorage"
 import chatGPTApiStorage from "@root/src/shared/storages/chatGPTStorage"
 import { IconTrash } from "@tabler/icons-react"
@@ -120,24 +121,36 @@ function Youdao() {
 }
 
 function ContentFlow() {
-  const domains = ["douban"]
+  const toast = useToast()
+  const domains = useStorage(wordflowStorage)
+  const domainZHMap = new Map([["douban", "豆瓣"]])
+
+  function handleToggle(e, domain) {
+    wordflowStorage.add({ ...domain, checked: e.target.checked })
+    toast({
+      title: `已保存`,
+      position: "top",
+      status: "success",
+      duration: 1000,
+      isClosable: true,
+    })
+  }
 
   return (
     <Card>
       <CardHeader>
-        <Heading size="md">设置随机插入生词的网站</Heading>
+        <Heading size="md">内容流生词</Heading>
         <Text pt="2" fontSize="sm">
-          开启后 苍耳 会自动在你浏览的内容前后插入生词（基于你的查词频率）。
+          开启后苍耳会自动在你浏览的内容前后插入生词模块（基于你的查词频率），帮助你随时随地记单词。
+          更多网站支持正在开发中，欢迎提出建议。
         </Text>
       </CardHeader>
       <CardBody>
         <Box>
           {domains.map(domain => (
-            <FormControl display="flex" alignItems="center" key={domain}>
-              <FormLabel htmlFor="email-alerts" mb="0">
-                {domain}
-              </FormLabel>
-              <Switch id="email-alerts" />
+            <FormControl display="flex" alignItems="center" justifyContent="space-between" key={domain.name}>
+              <FormLabel mb="0">{domainZHMap.get(domain.name)}</FormLabel>
+              <Switch onChange={e => handleToggle(e, domain)} isChecked={domain.checked} />
             </FormControl>
           ))}
         </Box>
@@ -154,7 +167,10 @@ function DisabledDomain() {
   return (
     <Card id="disabled-domain">
       <CardHeader>
-        <Heading size="md">设置需过滤的域名</Heading>
+        <Heading size="md">域名过滤</Heading>
+        <Text pt="2" fontSize="sm">
+          添加的域名被将会禁用苍耳的所有功能。支持正则匹配。
+        </Text>
       </CardHeader>
       <CardBody>
         <FormControl display="flex" gap="2">
