@@ -10,6 +10,7 @@ import {
   FormLabel,
   Heading,
   Input,
+  Switch,
   Text,
   useToast,
 } from "@chakra-ui/react"
@@ -25,6 +26,7 @@ export default function Settings() {
     <Flex gap="4" direction="column">
       <ChatGPT />
       <Youdao />
+      <ContentFlow />
       <DisabledDomain />
       {/* TODO: 是否过滤中文网站 */}
     </Flex>
@@ -112,6 +114,33 @@ function Youdao() {
           <Input type="text" value={youdao.appScrect} onChange={handleSecretInput} />
           <FormHelperText>We will never share your key.</FormHelperText>
         </FormControl>
+      </CardBody>
+    </Card>
+  )
+}
+
+function ContentFlow() {
+  const domains = ["douban"]
+
+  return (
+    <Card>
+      <CardHeader>
+        <Heading size="md">设置随机插入生词的网站</Heading>
+        <Text pt="2" fontSize="sm">
+          开启后 苍耳 会自动在你浏览的内容前后插入生词（基于你的查词频率）。
+        </Text>
+      </CardHeader>
+      <CardBody>
+        <Box>
+          {domains.map(domain => (
+            <FormControl display="flex" alignItems="center" key={domain}>
+              <FormLabel htmlFor="email-alerts" mb="0">
+                {domain}
+              </FormLabel>
+              <Switch id="email-alerts" />
+            </FormControl>
+          ))}
+        </Box>
       </CardBody>
     </Card>
   )

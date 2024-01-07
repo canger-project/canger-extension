@@ -1,15 +1,16 @@
 import { useEffect } from "react"
 import { createRoot } from "react-dom/client"
 import { Container, ContainerM } from "./Container"
+import { DoubanContentFlow } from "./ContentFlow/Douban"
 import HighLight from "./components/HighLight"
 import { DEFAULT_DOMAINS_SELECTOR, DOMAINS_SELECTOR } from "./const"
 import { isValidWord } from "./utils"
 
-const CONTENT_PREFIX = "[content-script]"
-
 export default function App() {
   useEffect(() => {
-    console.info(`${CONTENT_PREFIX} loaded :)`)
+    console.info(`Canger loaded :)`)
+    // 注入内容流
+    injectContentFlow()
     if (document.documentElement.lang === "en") {
       // FIXME: 自定义域名过滤
       // TODO: 提供是否开启高亮的选项
@@ -98,6 +99,24 @@ function injectTransInput() {
       setTimeout(() => {
         createRoot(container).render(<Container ele={textarea} type="input" />)
       }, 200)
+    })
+  })
+}
+
+// 注入内容流生词
+function injectContentFlow() {
+  document.addEventListener("DOMContentLoaded", () => {
+    chrome.runtime.sendMessage({ type: "taburl", message: "" }, resp => {
+      const currentDomain = resp.result
+      const hostname = new URL(currentDomain).hostname
+      // TODO: 过滤域名
+      switch (hostname) {
+        case "www.douban.com":
+          DoubanContentFlow()
+          break
+        default:
+          break
+      }
     })
   })
 }

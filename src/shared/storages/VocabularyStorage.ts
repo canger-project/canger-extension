@@ -9,6 +9,7 @@ export type Vocabulary = {
 type VocabularyStorage = BaseStorage<Vocabulary[]> & {
   add: (word: Vocabulary) => void
   find: (word: string) => Promise<Vocabulary> | undefined
+  getsByO: () => Promise<Vocabulary[]>
 }
 
 const storage = createStorage<Vocabulary[]>("vocabulary-storage-key-test3", [], {
@@ -31,6 +32,11 @@ const vocabularyStorage: VocabularyStorage = {
   },
   find: (word: string) => {
     return storage.get().then(words => words.find(w => w.word === word))
+  },
+
+  getsByO: () => {
+    // filter o != 0 and order by o desc
+    return storage.get().then(words => words.filter(w => w.o !== 0).sort((a, b) => b.o - a.o))
   },
 }
 

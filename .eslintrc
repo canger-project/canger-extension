@@ -32,7 +32,9 @@
     "import/no-unresolved": "off",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": 0,
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "jsx-a11y/anchor-is-valid": 0,
+    "jsx-a11y/click-events-have-key-events": 0
   },
   "globals": {
     "chrome": "readonly"
