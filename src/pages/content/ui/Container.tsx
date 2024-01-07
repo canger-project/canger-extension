@@ -1,4 +1,6 @@
+import useStorage from "@root/src/shared/hooks/useStorage"
 import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStorage"
+import vocabularyStorage, { Vocabulary } from "@root/src/shared/storages/VocabularyStorage"
 import { IconSignature, IconTransformFilled, IconX } from "@tabler/icons-react"
 import { useState } from "react"
 import { createRoot } from "react-dom/client"
@@ -40,17 +42,34 @@ export function ContainerM(props: { selection: Selection }) {
 }
 
 function TransWordBtn(props: { selection: Selection }) {
+  const vocabulary = useStorage(vocabularyStorage)
   const { selection } = props
+  const wordSelect = selection.toString().trim()
   const [thinking, setThinking] = useState(false)
 
   function handleClick() {
+    console.info(vocabulary)
     setThinking(true)
-    chrome.runtime.sendMessage({ type: "dictionary", message: selection.toString().trim() }, function (response) {
+    const container = document.getElementById("canger-root").shadowRoot.getElementById("canger-trans-container")
+    const root = createRoot(container)
+    const wordStorage = vocabulary && vocabulary.find(w => w.word === wordSelect)
+    let currentVocabulary: Vocabulary
+
+    // 如果已经存储过该词，直接渲染就行
+    // TODO: 优化代码结构
+    if (wordStorage !== undefined) {
+      currentVocabulary = { ...wordStorage, o: wordStorage.o + 1 }
       setThinking(false)
-      const container = document.getElementById("canger-root").shadowRoot.getElementById("canger-trans-container")
-      const root = createRoot(container)
-      root.render(<WordPanel wordDetail={response.result} selection={selection} />)
-    })
+      vocabularyStorage.add(currentVocabulary)
+      root.render(<WordPanel vocabulary={currentVocabulary} selection={selection} />)
+    } else {
+      chrome.runtime.sendMessage({ type: "dictionary", message: selection.toString().trim() }, resp => {
+        currentVocabulary = { word: wordSelect, o: 1, detail: resp.result }
+        setThinking(false)
+        vocabularyStorage.add(currentVocabulary)
+        root.render(<WordPanel vocabulary={currentVocabulary} selection={selection} />)
+      })
+    }
   }
 
   return (

@@ -1,8 +1,10 @@
+import { Vocabulary } from "@root/src/shared/storages/VocabularyStorage"
 import { getSelectionPosition } from "../utils"
 
 // 单词面板
-export default function WordPanel(props: { wordDetail: any; selection: Selection }) {
-  const { wordDetail, selection } = props
+export default function WordPanel(props: { vocabulary: Vocabulary; selection: Selection | Range }) {
+  const { vocabulary, selection } = props
+  const wordDetail = vocabulary.detail
   const { top, left } = getSelectionPosition(selection)
 
   const explains = wordDetail.basic.explains.map((item, index) => {
@@ -20,7 +22,10 @@ export default function WordPanel(props: { wordDetail: any; selection: Selection
         left: left + "px",
         zIndex: 999999,
       }}>
-      <div className="word">{wordDetail.translation[0]}</div>
+      <div className="word-header">
+        <div className="word">{vocabulary.word}</div>
+        <span className="word-o">+{vocabulary.o}</span>
+      </div>
       <div className="phonetic">
         {usPhonetic && <Phonetic type="us" phonetic={usPhonetic} speechUrl={wordDetail.basic["us-speech"]} />}
         {ukPhonetic && <Phonetic type="uk" phonetic={ukPhonetic} speechUrl={wordDetail.basic["uk-speech"]} />}
@@ -30,6 +35,7 @@ export default function WordPanel(props: { wordDetail: any; selection: Selection
   )
 }
 
+// 音标
 function Phonetic(props: { type: "us" | "uk"; phonetic: string; speechUrl: string }) {
   const { type, phonetic, speechUrl } = props
   const typeCN = { us: "美", uk: "英" }[type]
