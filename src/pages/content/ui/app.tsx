@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { createRoot } from "react-dom/client"
 import { Container, ContainerM } from "./Container"
+import HighLight from "./components/HighLight"
 import { DEFAULT_DOMAINS_SELECTOR, DOMAINS_SELECTOR } from "./const"
 import { isValidWord } from "./utils"
 
@@ -11,6 +12,8 @@ export default function App() {
     console.info(`${CONTENT_PREFIX} loaded :)`)
     if (document.documentElement.lang === "en") {
       // FIXME: 自定义域名过滤
+      // TODO: 提供是否开启高亮的选项
+      // injectHighLightWords()
       injectTransWord()
       injectTransParagraph()
       injectTransInput()
@@ -18,6 +21,13 @@ export default function App() {
   }, [])
 
   return <div className=""></div>
+}
+
+// 注入单词高亮
+function injectHighLightWords() {
+  const node = document.getElementsByTagName("body")[0]
+  // const words = await wordStorage.get()
+  hightLightWords(node, ["resolve", "good"])
 }
 
 // 注入单词翻译功能
@@ -90,4 +100,36 @@ function injectTransInput() {
       }, 200)
     })
   })
+}
+
+function hightLightWords(node, words) {
+  if (node.nodeType == Node.TEXT_NODE) {
+    for (const word of words) {
+      highLightWord(node, word)
+    }
+  } else {
+    for (let i = 0, len = node.childNodes.length; i < len; ++i) {
+      hightLightWords(node.childNodes[i], words)
+    }
+  }
+}
+
+function highLightWord(textNode, word) {
+  const text = textNode.nodeValue.toLowerCase()
+  const textList = [...text.matchAll(new RegExp(word, "gi"))].filter(
+    w =>
+      (text[w.index - 1] == " " && text[w.index + w[0].length] == " ") ||
+      (text[w.index - 1] == undefined && text[w.index + w[0].length] == " ") ||
+      (text[w.index - 1] == " " && text[w.index + w[0].length] == undefined),
+  )
+  if (textList.map(t => t[0]).includes(word)) {
+    for (const t of textList) {
+      const range = document.createRange()
+      range.setStart(textNode, Math.min(t.index, textNode.length))
+      range.setEnd(textNode, Math.min(t.index + word.length, textNode.length))
+      const span = document.createElement("span")
+      createRoot(span).render(<HighLight range={range} />)
+      range.surroundContents(span)
+    }
+  }
 }

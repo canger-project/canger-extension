@@ -105,6 +105,17 @@ button:hover .tooltip {
   display: flex;
   flex-direction: column;
 }
+
+.word-panel .word-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.word-panel .word-header .word-o {
+  color: #ef4444;
+}
+
 .word-panel .word {
   font-size: 18px;
   font-weight: bold;
@@ -124,4 +135,10 @@ button:hover .tooltip {
 
 .word-panel .phonetic span :hover {
   color: #ef4444;
+}
+
+
+.word-highlight {
+  text-decoration-line: underline;
+  text-decoration-color: #ef4444;
 }

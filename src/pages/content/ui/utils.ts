@@ -9,7 +9,7 @@ export function getSelectWords() {
 }
 
 export function getSelectionPosition(selection: Selection) {
-  const range = selection.getRangeAt(0)
+  const range = selection instanceof Range ? selection : selection.getRangeAt(0)
   const rect = range.getBoundingClientRect()
   const top = rect.top + window.scrollY - range.startContainer.parentElement.scrollTop
   const left = rect.left + window.scrollX - range.startContainer.parentElement.scrollLeft
