@@ -9,16 +9,18 @@ import { isValidWord } from "./utils"
 export default function App() {
   useEffect(() => {
     console.info(`Canger loaded :)`)
-    // 注入内容流
-    injectContentFlow()
-    if (document.documentElement.lang === "en") {
-      // FIXME: 自定义域名过滤
-      // TODO: 提供是否开启高亮的选项
-      // injectHighLightWords()
-      injectTransWord()
-      injectTransParagraph()
-      injectTransInput()
-    }
+    window.addEventListener("load", () => {
+      // 注入内容流
+      injectContentFlow()
+      if (document.documentElement.lang.includes("en")) {
+        // FIXME: 自定义域名过滤
+        // TODO: 提供是否开启高亮的选项
+        // injectHighLightWords()
+        injectTransWord()
+        injectTransParagraph()
+        injectTransInput()
+      }
+    })
   }, [])
 
   return <div className=""></div>
@@ -42,10 +44,6 @@ function injectTransWord() {
     if (isValidWord(word)) {
       root.render(<ContainerM selection={selection} />)
     }
-  })
-
-  container.addEventListener("blur", event => {
-    createRoot(container).unmount()
   })
 
   document.addEventListener("click", function (event) {
@@ -105,19 +103,17 @@ function injectTransInput() {
 
 // 注入内容流生词
 function injectContentFlow() {
-  window.addEventListener("load", () => {
-    chrome.runtime.sendMessage({ type: "taburl", message: "" }, resp => {
-      const currentDomain = resp.result
-      const hostname = new URL(currentDomain).hostname
-      // TODO: 过滤域名
-      switch (hostname) {
-        case "www.douban.com":
-          DoubanContentFlow()
-          break
-        default:
-          break
-      }
-    })
+  chrome.runtime.sendMessage({ type: "taburl", message: "" }, resp => {
+    const currentDomain = resp.result
+    const hostname = new URL(currentDomain).hostname
+    // TODO: 过滤域名
+    switch (hostname) {
+      case "www.douban.com":
+        DoubanContentFlow()
+        break
+      default:
+        break
+    }
   })
 }
 
