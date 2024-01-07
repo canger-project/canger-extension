@@ -2,7 +2,7 @@ import { Vocabulary } from "@root/src/shared/storages/VocabularyStorage"
 import { getSelectionPosition } from "../utils"
 
 // 单词面板
-export default function WordPanel(props: { vocabulary: Vocabulary; selection: Selection }) {
+export default function WordPanel(props: { vocabulary: Vocabulary; selection: Selection | Range }) {
   const { vocabulary, selection } = props
   const wordDetail = vocabulary.detail
   const { top, left } = getSelectionPosition(selection)

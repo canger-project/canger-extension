@@ -3,7 +3,7 @@ import vocabularyStorage from "@root/src/shared/storages/VocabularyStorage"
 import { createRoot } from "react-dom/client"
 import WordPanel from "./WordPanel"
 
-export default function HighLight(props: { range: Selection }) {
+export default function HighLight(props: { range: Range }) {
   const { range } = props
   const vocabulary = useStorage(vocabularyStorage)
   const wordStorage = vocabulary && vocabulary.find(w => w.word === range.toString().trim())
