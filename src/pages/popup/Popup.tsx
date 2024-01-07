@@ -22,7 +22,7 @@ const Popup: React.FC = () => {
         setAllow(false)
       }
     })
-  }, [])
+  }, [disabledDomain])
 
   const handleToggle = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()

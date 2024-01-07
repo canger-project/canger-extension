@@ -15,14 +15,15 @@ rootIntoShadow.id = "canger-input-container"
 const transContainerEle = document.createElement("div")
 transContainerEle.id = "canger-trans-container"
 
-const transPanelContainerEle = document.createElement("div")
-transPanelContainerEle.id = "canger-trans-panel-container"
+// 内容流容器
+const contentflowContainerEle = document.createElement("div")
+contentflowContainerEle.id = "canger-contentflow-container"
 
 // create shadow root
 const shadowRoot = root.attachShadow({ mode: "open" })
 shadowRoot.appendChild(rootIntoShadow)
 shadowRoot.appendChild(transContainerEle)
-shadowRoot.appendChild(transPanelContainerEle)
+shadowRoot.appendChild(contentflowContainerEle)
 
 // append style
 const styleElement = document.createElement("style")
