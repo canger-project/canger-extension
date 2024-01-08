@@ -1,3 +1,5 @@
+import useStorage from "@root/src/shared/hooks/useStorage"
+import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStorage"
 import { useEffect } from "react"
 import { createRoot } from "react-dom/client"
 import { Container, ContainerM } from "./Container"
@@ -7,20 +9,28 @@ import { DoubanContentFlow } from "./contentFlow/Douban"
 import { isValidWord } from "./utils"
 
 export default function App() {
+  const disabledDomain = useStorage(disabledDomainStorage)
+
   useEffect(() => {
     console.info(`Canger loaded :)`)
-    window.addEventListener("load", () => {
-      // 注入内容流
-      injectContentFlow()
-      // 段落翻译和输入仅在英文站开启？
-      if (document.documentElement.lang.includes("en")) {
-        // FIXME: 自定义域名过滤
-        // TODO: 提供是否开启高亮的选项
-        // injectHighLightWords()
-        injectTransParagraph()
-        injectTransInput()
+
+    chrome.runtime.sendMessage({ type: "taburl", message: "" }, resp => {
+      const currentUrl = resp.result
+      const domain = new URL(currentUrl).hostname
+      if (!disabledDomain.includes(domain)) {
+        window.addEventListener("load", () => {
+          injectContentFlow()
+
+          // 段落翻译和输入仅在英文站开启？
+          if (document.documentElement.lang.includes("en")) {
+            // TODO: 提供是否开启高亮的选项
+            // injectHighLightWords()
+            injectTransParagraph()
+            injectTransInput()
+          }
+          injectTransWord()
+        })
       }
-      injectTransWord()
     })
   }, [])
 

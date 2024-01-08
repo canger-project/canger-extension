@@ -15,10 +15,10 @@ const Popup: React.FC = () => {
   useEffect(() => {
     chrome.runtime.sendMessage({ type: "taburl", message: "" }, function (response) {
       const currentDomain = response.result
+      const domainOrigin = new URL(currentDomain).origin
+      setCurrentDomain(domainOrigin)
 
-      setCurrentDomain(currentDomain)
-
-      if (disabledDomain.includes(currentDomain)) {
+      if (disabledDomain.includes(domainOrigin)) {
         setAllow(false)
       }
     })
@@ -28,11 +28,12 @@ const Popup: React.FC = () => {
     event.preventDefault()
     chrome.runtime.sendMessage({ type: "taburl", message: "" }, function (response) {
       const currentDomain = response.result
+      const domainOrigin = new URL(currentDomain).origin
       if (event.target.checked) {
-        disabledDomainStorage.add(currentDomain)
+        disabledDomainStorage.add(domainOrigin)
         setAllow(false)
       } else {
-        disabledDomainStorage.remove(currentDomain)
+        disabledDomainStorage.remove(domainOrigin)
         setAllow(true)
       }
     })
