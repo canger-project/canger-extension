@@ -7,28 +7,27 @@ export type Vocabulary = {
 }
 
 type VocabularyStorage = BaseStorage<Vocabulary[]> & {
-  add: (word: Vocabulary) => void
+  add: (word: Vocabulary) => Promise<void>
   find: (word: string) => Promise<Vocabulary> | undefined
   getsByO: () => Promise<Vocabulary[]>
 }
 
-const storage = createStorage<Vocabulary[]>("vocabulary-storage-key-test3", [], {
-  storageType: StorageType.Sync,
+const storage = createStorage<Vocabulary[]>("vocabulary-storage-key-test4", [], {
+  storageType: StorageType.Local,
   liveUpdate: true,
 })
 
 const vocabularyStorage: VocabularyStorage = {
   ...storage,
-  add: (word: Vocabulary) => {
-    storage.get().then(words => {
-      const index = words.findIndex(w => w.word === word.word)
-      if (index !== -1) {
-        words[index] = word
-      } else {
-        words.push(word)
-      }
-      storage.set(words)
-    })
+  add: async (word: Vocabulary) => {
+    const words = await storage.get()
+    const index = words.findIndex(w => w.word === word.word)
+    if (index !== -1) {
+      words[index] = word
+    } else {
+      words.push(word)
+    }
+    storage.set(words)
   },
   find: (word: string) => {
     return storage.get().then(words => words.find(w => w.word === word))

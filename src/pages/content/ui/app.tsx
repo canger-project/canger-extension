@@ -12,14 +12,15 @@ export default function App() {
     window.addEventListener("load", () => {
       // 注入内容流
       injectContentFlow()
+      // 段落翻译和输入仅在英文站开启？
       if (document.documentElement.lang.includes("en")) {
         // FIXME: 自定义域名过滤
         // TODO: 提供是否开启高亮的选项
         // injectHighLightWords()
-        injectTransWord()
         injectTransParagraph()
         injectTransInput()
       }
+      injectTransWord()
     })
   }, [])
 
@@ -105,11 +106,12 @@ function injectTransInput() {
 function injectContentFlow() {
   chrome.runtime.sendMessage({ type: "taburl", message: "" }, resp => {
     const currentDomain = resp.result
+    console.info(currentDomain)
     const hostname = new URL(currentDomain).hostname
     // TODO: 过滤域名
-    switch (hostname) {
-      case "www.douban.com":
-        DoubanContentFlow()
+    switch (hostname.split(".").slice(-2).join(".")) {
+      case "douban.com":
+        DoubanContentFlow(currentDomain)
         break
       default:
         break

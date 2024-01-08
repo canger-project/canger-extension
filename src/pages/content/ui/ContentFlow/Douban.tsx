@@ -2,13 +2,55 @@ import Logo from "@assets/img/logo.svg"
 import vocabularyStorage, { Vocabulary } from "@root/src/shared/storages/VocabularyStorage"
 import { ReactNode } from "react"
 import { createRoot } from "react-dom/client"
+import Panel from "./Panel"
 
-export async function DoubanContentFlow() {
+export async function DoubanContentFlow(domain: string) {
   const vocabulary = await vocabularyStorage.getsByO()
-  const stream = document.getElementsByClassName("stream-items")[0]
-  // TODO: 控制插入频率
-  stream.insertBefore(Container(<Douban word={vocabulary[0]} />), stream.firstChild)
-  stream.insertBefore(Container(<Douban word={vocabulary[1]} />), stream.lastChild)
+  if (vocabulary.length > 0) {
+    const hostname = new URL(domain).hostname
+    console.info(domain)
+    switch (hostname) {
+      case "www.douban.com": {
+        if (domain === "https://www.douban.com/") {
+          const stream = document.getElementsByClassName("stream-items")[0]
+          vocabulary.forEach((word, index) => {
+            stream.insertBefore(Container(<Status word={word} />), stream.children[index * 3])
+          })
+        }
+        break
+      }
+      case "movie.douban.com":
+      case "book.douban.com": {
+        const hotcomment = document.getElementById("hot-comments")
+        const aside = document.getElementsByClassName("aside")[0]
+        aside.insertBefore(
+          Container(
+            <Panel
+              word={vocabulary[0]}
+              mainStyle={{ padding: "20px 12px", marginBottom: "40px", background: "#F0F3F5", fontSize: "13px" }}
+            />,
+          ),
+          aside.children[0],
+        )
+        vocabulary.forEach((word, index) => {
+          hotcomment.insertBefore(
+            Container(
+              <Panel
+                word={vocabulary[0]}
+                mainStyle={{ padding: "20px 12px", marginBottom: "40px", background: "#F0F3F5", fontSize: "13px" }}
+              />,
+            ),
+            hotcomment.children[index * 3],
+          )
+        })
+        break
+      }
+      default: {
+        console.info(domain)
+        break
+      }
+    }
+  }
 }
 
 function Container(reactNode: ReactNode) {
@@ -18,24 +60,12 @@ function Container(reactNode: ReactNode) {
   return container
 }
 
-function Douban(props: { word: Vocabulary }) {
+function Status(props: { word: Vocabulary }) {
   const { word } = props
-  const wordDetail = word.detail
-
-  const explains = wordDetail.basic.explains.map((item, index) => {
-    return <div key={index}>{item}</div>
-  })
-
-  function handleClick(e) {
-    e.preventDefault()
-    vocabularyStorage.add({ ...word, o: 0 })
-    document.getElementById(`canger-word-${word.word}`).remove()
-  }
 
   return (
     <div
-      id={`canger-word-${word.word}`}
-      className="new-status status-wrapper saying"
+      className={`new-status status-wrapper saying canger-word-${word.word}`}
       style={{
         padding: "20px 0",
       }}>
@@ -57,39 +87,46 @@ function Douban(props: { word: Vocabulary }) {
           </div>
 
           <div className="bd sns">
-            <div
-              className="status-saying"
-              style={{
-                background: "#f9f9f9",
-                padding: "16px 20px",
-              }}>
-              <blockquote className="">
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}>
-                  <h2
-                    style={{
-                      color: "#37a",
-                    }}>
-                    {word.word}
-                  </h2>
-                  <div>查词次数: {word.o}</div>
-                </div>
-
-                {explains}
-              </blockquote>
-            </div>
-            <div className="actions">
-              <a href="" className="btn" onClick={handleClick}>
-                学会了
-              </a>
-            </div>
+            <Panel
+              word={word}
+              mainStyle={{ padding: "20px 12px", marginBottom: "40px", background: "#F0F3F5", fontSize: "13px" }}
+            />
           </div>
         </div>
       </div>
+    </div>
+  )
+}
+
+function Subject(props: { word: Vocabulary }) {
+  const { word } = props
+  const wordDetail = word.detail
+
+  const explains = wordDetail.basic.explains ? (
+    wordDetail.basic.explains.map((item, index) => {
+      return <div key={index}>{item}</div>
+    })
+  ) : (
+    <div></div>
+  )
+  return (
+    <div
+      style={{
+        padding: "20px 12px",
+        marginBottom: "40px",
+        background: "#F0F3F5",
+        fontSize: "13px",
+      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}>
+        <h2>{word.word}</h2>
+        <div>查词次数 {word.o}</div>
+      </div>
+      <div>{explains}</div>
     </div>
   )
 }

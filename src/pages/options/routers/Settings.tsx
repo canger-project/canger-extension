@@ -10,13 +10,13 @@ import {
   FormLabel,
   Heading,
   Input,
-  Switch,
+  InputGroup,
+  InputRightElement,
   Text,
   useToast,
 } from "@chakra-ui/react"
 import useStorage from "@root/src/shared/hooks/useStorage"
 import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStorage"
-import wordflowStorage from "@root/src/shared/storages/WordFlowStorage"
 import youdaoStorage from "@root/src/shared/storages/YoudaoStorage"
 import chatGPTApiStorage from "@root/src/shared/storages/chatGPTStorage"
 import { IconTrash } from "@tabler/icons-react"
@@ -27,7 +27,6 @@ export default function Settings() {
     <Flex gap="4" direction="column">
       <ChatGPT />
       <Youdao />
-      <ContentFlow />
       <DisabledDomain />
       {/* TODO: 是否过滤中文网站 */}
     </Flex>
@@ -54,13 +53,14 @@ function ChatGPT() {
   return (
     <Card>
       <CardHeader>
-        <Heading size="md">设置 ChatGPT</Heading>
+        <Heading size="md">ChatGPT</Heading>
+        <Text fontSize="sm">段落翻译和输入优化功能依赖于 ChatGPT, 请填入对应的秘钥。</Text>
       </CardHeader>
       <CardBody>
         <FormControl>
-          <FormLabel>ChatGPT API Key</FormLabel>
-          <Input type="text" value={chatgptapi} onChange={handleKeyInput} />
-          <FormHelperText>We will never share your key.</FormHelperText>
+          <FormLabel>API Key</FormLabel>
+          <SecretInput value={chatgptapi} handleChange={handleKeyInput} />
+          <FormHelperText>您的秘钥会被存储在本地。</FormHelperText>
         </FormControl>
       </CardBody>
     </Card>
@@ -102,60 +102,44 @@ function Youdao() {
   return (
     <Card>
       <CardHeader>
-        <Heading size="md">设置有道词典</Heading>
+        <Heading size="md">有道词典</Heading>
+        <Text fontSize="sm">划词翻译功能使用的是有道词典，请自行搜索相关教程，获取应用 ID 和秘钥。</Text>
       </CardHeader>
       <CardBody>
         <FormControl>
           <FormLabel>App ID</FormLabel>
-          <Input type="text" value={youdao.appId} onChange={handleIDInput} />
-          <FormHelperText>We will never share your key.</FormHelperText>
+          <SecretInput value={youdao.appId} handleChange={handleIDInput} />
         </FormControl>
         <FormControl>
           <FormLabel>App Secret</FormLabel>
-          <Input type="text" value={youdao.appScrect} onChange={handleSecretInput} />
-          <FormHelperText>We will never share your key.</FormHelperText>
+          <SecretInput value={youdao.appScrect} handleChange={handleSecretInput} />
+          <FormHelperText>您的秘钥会被存储在本地。</FormHelperText>
         </FormControl>
       </CardBody>
     </Card>
   )
 }
 
-function ContentFlow() {
-  const toast = useToast()
-  const domains = useStorage(wordflowStorage)
-  const domainZHMap = new Map([["douban", "豆瓣"]])
-
-  function handleToggle(e, domain) {
-    wordflowStorage.add({ ...domain, checked: e.target.checked })
-    toast({
-      title: `已保存`,
-      position: "top",
-      status: "success",
-      duration: 1000,
-      isClosable: true,
-    })
-  }
+function SecretInput(props: { value: string; handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) {
+  const { value, handleChange } = props
+  const [show, setShow] = useState(false)
+  const handleClick = () => setShow(!show)
 
   return (
-    <Card>
-      <CardHeader>
-        <Heading size="md">内容流生词</Heading>
-        <Text pt="2" fontSize="sm">
-          开启后苍耳会自动在你浏览的内容前后插入生词模块（基于你的查词频率），帮助你随时随地记单词。
-          更多网站支持正在开发中，欢迎提出建议。
-        </Text>
-      </CardHeader>
-      <CardBody>
-        <Box>
-          {domains.map(domain => (
-            <FormControl display="flex" alignItems="center" justifyContent="space-between" key={domain.name}>
-              <FormLabel mb="0">{domainZHMap.get(domain.name)}</FormLabel>
-              <Switch onChange={e => handleToggle(e, domain)} isChecked={domain.checked} />
-            </FormControl>
-          ))}
-        </Box>
-      </CardBody>
-    </Card>
+    <InputGroup size="md">
+      <Input
+        pr="4.5rem"
+        type={show ? "text" : "password"}
+        placeholder="Enter password"
+        value={value}
+        onChange={handleChange}
+      />
+      <InputRightElement width="4.5rem">
+        <Button h="1.75rem" size="sm" onClick={handleClick}>
+          {show ? "Hide" : "Show"}
+        </Button>
+      </InputRightElement>
+    </InputGroup>
   )
 }
 

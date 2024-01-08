@@ -47,28 +47,30 @@ function TransWordBtn(props: { selection: Selection }) {
   const wordSelect = selection.toString().trim()
   const [thinking, setThinking] = useState(false)
 
-  function handleClick() {
-    console.info(vocabulary)
+  async function handleClick() {
     setThinking(true)
     const container = document.getElementById("canger-root").shadowRoot.getElementById("canger-trans-container")
     const root = createRoot(container)
     const wordStorage = vocabulary && vocabulary.find(w => w.word === wordSelect)
     let currentVocabulary: Vocabulary
-
     // 如果已经存储过该词，直接渲染就行
-    // TODO: 优化代码结构
     if (wordStorage !== undefined) {
       currentVocabulary = { ...wordStorage, o: wordStorage.o + 1 }
       setThinking(false)
-      vocabularyStorage.add(currentVocabulary)
+      await vocabularyStorage.add(currentVocabulary)
       root.render(<WordPanel vocabulary={currentVocabulary} selection={selection} />)
     } else {
-      chrome.runtime.sendMessage({ type: "dictionary", message: selection.toString().trim() }, resp => {
+      const resp = await chrome.runtime.sendMessage({ type: "dictionary", message: selection.toString().trim() })
+      const detail = resp.result
+      if (detail.errorCode !== "0") {
+        // TODO: 出错处理
+        console.error(detail)
+      } else {
         currentVocabulary = { word: wordSelect, o: 1, detail: resp.result }
         setThinking(false)
-        vocabularyStorage.add(currentVocabulary)
+        await vocabularyStorage.add(currentVocabulary)
         root.render(<WordPanel vocabulary={currentVocabulary} selection={selection} />)
-      })
+      }
     }
   }
 
@@ -84,7 +86,10 @@ function TransWordBtn(props: { selection: Selection }) {
         {thinking ? (
           <span className="loader"></span>
         ) : (
-          <button onClick={handleClick}>
+          <button
+            onClick={async () => {
+              await handleClick()
+            }}>
             <IconTransformFilled size={24} />
             <span className="tooltip">翻译</span>
           </button>
