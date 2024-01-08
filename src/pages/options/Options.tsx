@@ -63,18 +63,18 @@ const Layout: React.FC = () => {
             height: "calc(100vh - 120px)",
           }}>
           <Box display="flex" flexDirection="column" gap="2" mx="4" my="2">
-            <Button>
-              <Link to={`/`}>欢迎</Link>
-            </Button>
-            <Button>
-              <Link to={`/settings`}>基础设置</Link>
-            </Button>
-            <Button>
-              <Link to={`/words`}>背词模式</Link>
-            </Button>
-            <Button>
-              <Link to={`/about`}>关于</Link>
-            </Button>
+            <Link to={`/`}>
+              <Button width={"100%"}>欢迎</Button>
+            </Link>
+            <Link to={`/settings`}>
+              <Button width={"100%"}>基础设置</Button>
+            </Link>
+            <Link to={`/words`}>
+              <Button width={"100%"}>背词模式</Button>
+            </Link>
+            <Link to={`/about`}>
+              <Button width={"100%"}>关于</Button>
+            </Link>
           </Box>
           <Flex alignItems="center" gap="2" justifyContent="center" textAlign="center">
             <Image src={brand} boxSize="32px"></Image>

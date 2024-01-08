@@ -148,50 +148,69 @@ function DisabledDomain() {
   const disabledDomain = useStorage(disabledDomainStorage)
   const toast = useToast()
 
+  function handleClick(e) {
+    e.preventDefault()
+
+    let domainOrigin: string
+    try {
+      domainOrigin = new URL(domain).origin
+      disabledDomainStorage.add(domainOrigin)
+      toast({
+        title: `添加成功`,
+        position: "top",
+        status: "success",
+        duration: 1000,
+        isClosable: true,
+      })
+    } catch (e) {
+      toast({
+        title: `请检查域名是否正确`,
+        position: "top",
+        status: "error",
+        duration: 1000,
+        isClosable: true,
+      })
+    }
+  }
+
   return (
     <Card id="disabled-domain">
       <CardHeader>
-        <Heading size="md">域名过滤</Heading>
+        <Heading size="md">网站黑名单</Heading>
         <Text pt="2" fontSize="sm">
-          添加的域名被将会禁用苍耳的所有功能。支持正则匹配。
+          默认在所有网站上运行，您可以在此处添加域名，来禁止在该网站运行。
         </Text>
       </CardHeader>
       <CardBody>
         <FormControl display="flex" gap="2">
           <Input type="text" value={domain} onChange={e => setDomain(e.target.value)} />
-          <Button
-            onClick={() => {
-              disabledDomainStorage.add(domain)
-              toast({
-                title: `添加成功`,
-                position: "top",
-                status: "success",
-                duration: 1000,
-                isClosable: true,
-              })
-            }}>
-            添加
-          </Button>
+          <Button onClick={handleClick}>添加</Button>
         </FormControl>
         <Box>
-          {disabledDomain.map(domain => (
-            <Flex key={domain} align="center" justify="space-between" my="2">
-              <Text fontSize="md">{domain}</Text>
-              <Button
-                onClick={() => {
-                  disabledDomainStorage.remove(domain)
-                  toast({
-                    title: `已删除`,
-                    position: "top",
-                    status: "success",
-                    duration: 1000,
-                    isClosable: true,
-                  })
-                }}>
-                <IconTrash />
-              </Button>
-            </Flex>
-          ))}
+          {disabledDomain.length > 0 ? (
+            disabledDomain.map(domain => (
+              <Flex key={domain} align="center" justify="space-between" my="2">
+                <Text fontSize="md">{domain}</Text>
+                <Button
+                  onClick={() => {
+                    disabledDomainStorage.remove(domain)
+                    toast({
+                      title: `已删除`,
+                      position: "top",
+                      status: "success",
+                      duration: 1000,
+                      isClosable: true,
+                    })
+                  }}>
+                  <IconTrash />
+                </Button>
+              </Flex>
+            ))
+          ) : (
+            <Text fontSize="md" textAlign="center" my="12">
+              暂无黑名单
+            </Text>
+          )}
         </Box>
       </CardBody>
     </Card>

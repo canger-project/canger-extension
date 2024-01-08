@@ -13,9 +13,7 @@ type disabledDomainStorage = BaseStorage<disabledDomain> & {
   exists: (domain: string) => Promise<boolean>
 }
 
-const DEFAULT_DOMAINS = ["www.baidu.com", "www.google.com", "www.bing.com"]
-
-const storage = createStorage<disabledDomain>("disabled-domain-storage-key", DEFAULT_DOMAINS, {
+const storage = createStorage<disabledDomain>("disabled-domain-storage-key", [], {
   storageType: StorageType.Local,
   liveUpdate: true,
 })
@@ -23,8 +21,9 @@ const storage = createStorage<disabledDomain>("disabled-domain-storage-key", DEF
 const disabledDomainStorage: disabledDomainStorage = {
   ...storage,
   add: (domain: string) => {
-    storage.set(currentDomain => {
-      return [...currentDomain, domain]
+    storage.get().then(domains => {
+      domains.find(d => d === domain) || domains.push(domain)
+      storage.set(domains)
     })
   },
   remove: (domain: string) => {
