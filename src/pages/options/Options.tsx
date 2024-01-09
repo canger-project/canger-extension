@@ -6,12 +6,10 @@ import React from "react"
 import { Link, Outlet, Route, Routes, useLocation } from "react-router-dom"
 import About from "./routers/About"
 import Settings from "./routers/Settings"
-import Welcome from "./routers/Welcome"
 import Words from "./routers/Words"
 
 const ROUTER_MAP = new Map([
   ["/", "欢迎"],
-  ["/settings", "基础设置"],
   ["/words", "背词模式"],
   ["/about", "关于"],
 ])
@@ -21,8 +19,7 @@ export const Options: React.FC = () => {
     <Box my="8">
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Welcome />} />
-          <Route path="settings" element={<Settings />} />
+          <Route index element={<Settings />} />
           <Route path="words" element={<Words />} />
           <Route path="about" element={<About />} />
           <Route path="*" element={<NoMatch />} />
@@ -65,9 +62,6 @@ const Layout: React.FC = () => {
           <Box display="flex" flexDirection="column" gap="2" mx="4" my="2">
             <Link to={`/`}>
               <Button width={"100%"}>欢迎</Button>
-            </Link>
-            <Link to={`/settings`}>
-              <Button width={"100%"}>基础设置</Button>
             </Link>
             <Link to={`/words`}>
               <Button width={"100%"}>背词模式</Button>

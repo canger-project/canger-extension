@@ -1,9 +1,20 @@
 import vocabularyStorage, { Vocabulary } from "@root/src/shared/storages/VocabularyStorage"
+import { Phonetic } from "../components/WordPanel"
 
 export default function Panel(props: { word: Vocabulary; mainStyle: any }) {
   const { word, mainStyle } = props
-  const wordDetail = word.detail
+  const style = {
+    ...mainStyle,
+    padding: "12px",
+    color: "#020617",
+    background: "white",
+    border: "1px solid #eee",
+    borderRadius: "4px",
+  }
 
+  const wordDetail = word.detail
+  const usPhonetic = wordDetail.basic["us-phonetic"]
+  const ukPhonetic = wordDetail.basic["uk-phonetic"]
   const explains = wordDetail.basic.explains ? (
     wordDetail.basic.explains.map((item: string, index) => {
       // 取；前 3 个
@@ -23,7 +34,7 @@ export default function Panel(props: { word: Vocabulary; mainStyle: any }) {
   }
 
   return (
-    <div className={`canger-word-${word.word}`} style={mainStyle}>
+    <div className={`canger-word-${word.word} canger-word-panel`} style={style}>
       <div
         style={{
           display: "flex",
@@ -32,23 +43,57 @@ export default function Panel(props: { word: Vocabulary; mainStyle: any }) {
         }}>
         <h2
           style={{
-            color: "black",
-            fontWeight: 500,
+            color: "#020617",
+            fontSize: "1.25em",
+            fontWeight: 700,
           }}>
           {word.word}
         </h2>
-        <div>查词次数 {word.o}</div>
+        <span
+          onClick={async e => {
+            await handleClick(e)
+          }}>
+          <svg
+            onMouseOver={e => {
+              e.currentTarget.style.color = "#FF0000"
+            }}
+            onMouseOut={e => {
+              e.currentTarget.style.color = "#020617"
+            }}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            strokeWidth="2"
+            stroke="currentColor"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M7 12l5 5l10 -10" />
+            <path d="M2 12l5 5m5 -5l5 -5" />
+            <span className="tooltip">翻译</span>
+          </svg>
+        </span>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          margin: "4px 0",
+          color: "#64748b",
+        }}>
+        {usPhonetic && <Phonetic type="us" phonetic={usPhonetic} speechUrl={wordDetail.basic["us-speech"]} />}
+        {ukPhonetic && <Phonetic type="uk" phonetic={ukPhonetic} speechUrl={wordDetail.basic["uk-speech"]} />}
       </div>
       <div>{explains}</div>
-      <button
+      <div
         style={{
-          textAlign: "center",
-        }}
-        onClick={async e => {
-          await handleClick(e)
+          display: "flex",
+          justifyContent: "right",
+          color: "#64748b",
         }}>
-        学会了
-      </button>
+        查词次数 {word.o}
+      </div>
     </div>
   )
 }

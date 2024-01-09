@@ -1,4 +1,5 @@
 import useStorage from "@root/src/shared/hooks/useStorage"
+import { commonStorage } from "@root/src/shared/storages/CommonStorage"
 import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStorage"
 import { useEffect } from "react"
 import { createRoot } from "react-dom/client"
@@ -17,22 +18,22 @@ export default function App() {
     chrome.runtime.sendMessage({ type: "taburl", message: "" }, resp => {
       const currentUrl = resp.result
       const domain = new URL(currentUrl).hostname
-      if (!disabledDomain.includes(domain)) {
-        window.addEventListener("load", () => {
-          injectContentFlow()
-
-          // 段落翻译和输入仅在英文站开启？
-          if (document.documentElement.lang.includes("en")) {
+      window.addEventListener("load", () => {
+        injectContentFlow()
+        // 英文网站或者非禁用域名开启段落翻译和写作优化
+        const isLangEn = document.documentElement.lang.includes("en")
+        if (isLangEn) {
+          if (!disabledDomain.includes(domain)) {
             // TODO: 提供是否开启高亮的选项
             // injectHighLightWords()
             injectTransParagraph()
             injectTransInput()
           }
-          injectTransWord()
-        })
-      }
+        }
+        injectTransWord()
+      })
     })
-  }, [])
+  }, [disabledDomain])
 
   return <div className=""></div>
 }
@@ -113,15 +114,16 @@ function injectTransInput() {
 }
 
 // 注入内容流生词
-function injectContentFlow() {
+async function injectContentFlow() {
+  const commonConfig = await commonStorage.get()
+  commonConfig.wordLearnDensity
   chrome.runtime.sendMessage({ type: "taburl", message: "" }, resp => {
     const currentDomain = resp.result
-    console.info(currentDomain)
-    const hostname = new URL(currentDomain).hostname
-    // TODO: 过滤域名
-    switch (hostname.split(".").slice(-2).join(".")) {
+    const doaminUrl = new URL(currentDomain)
+    const host = doaminUrl.hostname.split(".").slice(-2).join(".")
+    switch (host) {
       case "douban.com":
-        DoubanContentFlow(currentDomain)
+        DoubanContentFlow(currentDomain, commonConfig.wordLearnDensity)
         break
       default:
         break
