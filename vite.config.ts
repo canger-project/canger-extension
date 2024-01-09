@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from "@sentry/vite-plugin"
 /// <reference types="vitest" />
 import react from "@vitejs/plugin-react"
 import path, { resolve } from "path"
@@ -38,16 +39,23 @@ export default defineConfig({
     customDynamicImport(),
     addHmr({ background: enableHmrInBackgroundScript, view: true }),
     isDev && watchRebuild({ afterWriteBundle: regenerateCacheInvalidationKey }),
+    sentryVitePlugin({
+      org: "shanxiao",
+      project: "canger",
+    }),
   ],
   publicDir,
   build: {
     outDir,
+
     /** Can slow down build speed. */
     // sourcemap: isDev,
     minify: isProduction,
+
     modulePreload: false,
     reportCompressedSize: isProduction,
     emptyOutDir: !isDev,
+
     rollupOptions: {
       input: {
         panel: resolve(pagesDir, "panel", "index.html"),
@@ -74,6 +82,8 @@ export default defineConfig({
         warn(warning)
       },
     },
+
+    sourcemap: true,
   },
   test: {
     globals: true,
