@@ -12,6 +12,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Switch,
   Text,
   useToast,
 } from "@chakra-ui/react"
@@ -25,10 +26,11 @@ import { useState } from "react"
 export default function Settings() {
   return (
     <Flex gap="4" direction="column">
-      <ChatGPT />
-      <Youdao />
+      <DisableCNDomain />
+      {/* TODO: 或许在高级设置中可以自定义？ */}
+      {/* <ChatGPT /> */}
+      {/* <Youdao /> */}
       <DisabledDomain />
-      {/* TODO: 是否过滤中文网站 */}
     </Flex>
   )
 }
@@ -178,7 +180,7 @@ function DisabledDomain() {
       <CardHeader>
         <Heading size="md">网站黑名单</Heading>
         <Text pt="2" fontSize="sm">
-          默认在所有网站上运行，您可以在此处添加域名，来禁止在该网站运行。
+          您可以在此处添加域名，来禁止在该网站运行（内容流背单词功能不会被关闭）。比如：https://douban.com。
         </Text>
       </CardHeader>
       <CardBody>
@@ -212,6 +214,23 @@ function DisabledDomain() {
             </Text>
           )}
         </Box>
+      </CardBody>
+    </Card>
+  )
+}
+
+function DisableCNDomain() {
+  function handleSwitch(e) {}
+  return (
+    <Card>
+      <CardBody>
+        <Flex alignItems="center" justifyContent="space-between">
+          <Box>
+            <Heading size="md">仅英文网站</Heading>
+            <Text fontSize="sm">仅在目标网页为英文时才开启（背词模式不受影响）</Text>
+          </Box>
+          <Switch onChange={e => handleSwitch(e)} isChecked={false} />
+        </Flex>
       </CardBody>
     </Card>
   )

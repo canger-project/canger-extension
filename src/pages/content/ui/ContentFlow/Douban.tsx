@@ -4,45 +4,43 @@ import { ReactNode } from "react"
 import { createRoot } from "react-dom/client"
 import Panel from "./Panel"
 
-export async function DoubanContentFlow(domain: string) {
+export async function DoubanContentFlow(domain: string, density: string) {
   const vocabulary = await vocabularyStorage.getsByO()
+
   if (vocabulary.length > 0) {
-    const hostname = new URL(domain).hostname
-    console.info(domain)
-    switch (hostname) {
+    const domainUrl = new URL(domain)
+    switch (domainUrl.hostname) {
       case "www.douban.com": {
-        if (domain === "https://www.douban.com/") {
+        if (domainUrl.pathname === "/") {
+          const page = parseInt(domainUrl.searchParams.get("p") || "1", 10)
+
           const stream = document.getElementsByClassName("stream-items")[0]
-          vocabulary.forEach((word, index) => {
-            stream.insertBefore(Container(<Status word={word} />), stream.children[index * 3])
+          console.info("density: ", density)
+          const d = () => {
+            if (density === "low") {
+              return 2
+            } else if (density === "medium") {
+              return ~~(stream.children.length / 3)
+            } else if (density === "high") {
+              return stream.children.length - 2
+            }
+          }
+          vocabulary.slice(page, d() * page + d()).forEach((word, index) => {
+            stream.insertBefore(
+              Container(<Status word={word} />),
+              stream.children[index * ~~(stream.children.length / d() + 1)],
+            )
           })
         }
         break
       }
       case "movie.douban.com":
       case "book.douban.com": {
-        const hotcomment = document.getElementById("hot-comments")
         const aside = document.getElementsByClassName("aside")[0]
         aside.insertBefore(
-          Container(
-            <Panel
-              word={vocabulary[0]}
-              mainStyle={{ padding: "20px 12px", marginBottom: "40px", background: "#F0F3F5", fontSize: "13px" }}
-            />,
-          ),
+          Container(<Panel word={vocabulary[0]} mainStyle={{ marginBottom: "24px" }} />),
           aside.children[0],
         )
-        vocabulary.forEach((word, index) => {
-          hotcomment.insertBefore(
-            Container(
-              <Panel
-                word={vocabulary[0]}
-                mainStyle={{ padding: "20px 12px", marginBottom: "40px", background: "#F0F3F5", fontSize: "13px" }}
-              />,
-            ),
-            hotcomment.children[index * 3],
-          )
-        })
         break
       }
       default: {
@@ -87,10 +85,7 @@ function Status(props: { word: Vocabulary }) {
           </div>
 
           <div className="bd sns">
-            <Panel
-              word={word}
-              mainStyle={{ padding: "20px 12px", marginBottom: "40px", background: "#F0F3F5", fontSize: "13px" }}
-            />
+            <Panel word={word} mainStyle={{ marginBottom: "24px" }} />
           </div>
         </div>
       </div>

@@ -39,10 +39,11 @@ export default defineConfig({
     customDynamicImport(),
     addHmr({ background: enableHmrInBackgroundScript, view: true }),
     isDev && watchRebuild({ afterWriteBundle: regenerateCacheInvalidationKey }),
-    sentryVitePlugin({
-      org: "shanxiao",
-      project: "canger",
-    }),
+    isProduction &&
+      sentryVitePlugin({
+        org: "shanxiao",
+        project: "canger",
+      }),
   ],
   publicDir,
   build: {

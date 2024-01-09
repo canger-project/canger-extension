@@ -26,7 +26,13 @@ export default function WordPanel(props: { vocabulary: Vocabulary; selection: Se
         <div className="word">{vocabulary.word}</div>
         <span className="word-o">+{vocabulary.o}</span>
       </div>
-      <div className="phonetic">
+      <div
+        style={{
+          display: "flex",
+          color: "#64748b",
+          margin: "12px 0",
+          fontSize: "12px",
+        }}>
         {usPhonetic && <Phonetic type="us" phonetic={usPhonetic} speechUrl={wordDetail.basic["us-speech"]} />}
         {ukPhonetic && <Phonetic type="uk" phonetic={ukPhonetic} speechUrl={wordDetail.basic["uk-speech"]} />}
       </div>
@@ -36,7 +42,7 @@ export default function WordPanel(props: { vocabulary: Vocabulary; selection: Se
 }
 
 // 音标
-function Phonetic(props: { type: "us" | "uk"; phonetic: string; speechUrl: string }) {
+export function Phonetic(props: { type: "us" | "uk"; phonetic: string; speechUrl: string }) {
   const { type, phonetic, speechUrl } = props
   const typeCN = { us: "美", uk: "英" }[type]
 
@@ -46,7 +52,12 @@ function Phonetic(props: { type: "us" | "uk"; phonetic: string; speechUrl: strin
   }
 
   return (
-    <span>
+    <span
+      style={{
+        display: "flex",
+        alignItems: "center",
+        marginRight: "6px",
+      }}>
       <svg
         onClick={handleClick}
         xmlns="http://www.w3.org/2000/svg"

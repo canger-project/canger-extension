@@ -13,6 +13,7 @@ import {
   useToast,
 } from "@chakra-ui/react"
 import useStorage from "@root/src/shared/hooks/useStorage"
+import { commonStorage } from "@root/src/shared/storages/CommonStorage"
 import wordflowStorage from "@root/src/shared/storages/WordFlowStorage"
 
 export default function Words() {
@@ -66,6 +67,17 @@ function SupportedDomain() {
 }
 
 function Density() {
+  const toast = useToast()
+  const commonConfig = useStorage(commonStorage)
+  const options = ["low", "medium", "high"].map(option => {
+    const selected = commonConfig.wordLearnDensity === option
+    return (
+      <option value={option} selected={selected} key={option}>
+        {option}
+      </option>
+    )
+  })
+
   return (
     <Card>
       <CardBody>
@@ -75,10 +87,19 @@ function Density() {
             <Text fontSize="sm">不同的密度对应单词在网站的不同出现频率</Text>
           </Box>
 
-          <Select width="fit-content">
-            <option value="1">稀疏</option>
-            <option value="2">适中</option>
-            <option value="3">密集</option>
+          <Select
+            width="fit-content"
+            onChange={async e => {
+              await commonStorage.add("wordLearnDensity", e.target.value)
+              toast({
+                title: `已保存`,
+                position: "top",
+                status: "success",
+                duration: 1000,
+                isClosable: true,
+              })
+            }}>
+            {options}
           </Select>
         </Flex>
       </CardBody>
