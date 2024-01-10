@@ -39,4 +39,4 @@ jobs:
         with:
           file: "canger-chrome-${{ github.ref_name }}.zip"
           tags: true
-          draft: false
+          draft: true
