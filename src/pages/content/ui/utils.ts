@@ -1,9 +1,10 @@
 import { ReactNode } from "react"
 import { createRoot } from "react-dom/client"
 
-// 是否英文：长度不为空且仅包含单词字母
+// 是否英文：长度不为空且仅包含单词字母(两边有空格的去掉)
 export function isValidWord(word) {
-  return word.length > 0 && /^[a-zA-Z]+$/.test(word.replace(/\s+/g, ""))
+  word = word.trim()
+  return word.length > 0 && /^[a-zA-Z]+$/.test(word)
 }
 
 export function getSelectWords() {

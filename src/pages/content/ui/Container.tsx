@@ -4,8 +4,9 @@ import vocabularyStorage, { Vocabulary } from "@root/src/shared/storages/Vocabul
 import { IconSignature, IconTransformFilled, IconX } from "@tabler/icons-react"
 import { useState } from "react"
 import { createRoot } from "react-dom/client"
+import SentencePanel from "./components/SentencePanel"
 import WordPanel from "./components/WordPanel"
-import { getSelectionPosition } from "./utils"
+import { getSelectionPosition, isValidWord } from "./utils"
 
 export function Container(props: { ele: HTMLElement; type: "input" | "trans" }) {
   const { ele, type } = props
@@ -44,33 +45,43 @@ export function ContainerM(props: { selection: Selection }) {
 function TransWordBtn(props: { selection: Selection }) {
   const vocabulary = useStorage(vocabularyStorage)
   const { selection } = props
-  const wordSelect = selection.toString().trim()
+  const selectedStr = selection.toString().trim()
   const [thinking, setThinking] = useState(false)
 
   async function handleClick() {
     setThinking(true)
     const container = document.getElementById("canger-root").shadowRoot.getElementById("canger-trans-container")
     const root = createRoot(container)
-    const wordStorage = vocabulary && vocabulary.find(w => w.word === wordSelect)
+    const wordStorage = vocabulary && vocabulary.find(w => w.word === selectedStr)
     let currentVocabulary: Vocabulary
-    // 如果已经存储过该词，直接渲染就行
-    if (wordStorage !== undefined) {
-      currentVocabulary = { ...wordStorage, o: wordStorage.o + 1 }
-      setThinking(false)
-      await vocabularyStorage.add(currentVocabulary)
-      root.render(<WordPanel vocabulary={currentVocabulary} selection={selection} />)
-    } else {
-      const resp = await chrome.runtime.sendMessage({ type: "dictionary", message: selection.toString().trim() })
-      const detail = resp.result
-      if (detail.errorCode !== "0") {
-        // TODO: 出错处理
-        console.error(detail)
-      } else {
-        currentVocabulary = { word: wordSelect, o: 1, detail: resp.result }
+
+    // 根据是单词还是句子，展示不同的面板
+    if (isValidWord(selectedStr)) {
+      // 如果已经存储过该词，直接渲染就行
+      if (wordStorage !== undefined) {
+        currentVocabulary = { ...wordStorage, o: wordStorage.o + 1 }
         setThinking(false)
         await vocabularyStorage.add(currentVocabulary)
         root.render(<WordPanel vocabulary={currentVocabulary} selection={selection} />)
+      } else {
+        const resp = await chrome.runtime.sendMessage({ type: "dictionary", message: selectedStr })
+        const detail = resp.result
+        if (detail.errorCode !== "0") {
+          // TODO: 出错处理
+          console.error(detail)
+        } else {
+          currentVocabulary = { word: selectedStr, o: 1, detail: resp.result }
+          setThinking(false)
+          await vocabularyStorage.add(currentVocabulary)
+          root.render(<WordPanel vocabulary={currentVocabulary} selection={selection} />)
+        }
       }
+    } else {
+      // 句子面板
+      const resp = await chrome.runtime.sendMessage({ type: "sentence", message: selectedStr })
+      setThinking(false)
+      const sentence = resp.result[0].translations[0].text
+      root.render(<SentencePanel sentence={sentence} selection={selection} />)
     }
   }
 

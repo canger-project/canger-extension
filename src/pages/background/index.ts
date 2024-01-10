@@ -2,7 +2,7 @@ import reloadOnUpdate from "virtual:reload-on-update-in-background-script"
 import "webextension-polyfill"
 
 const BG_PREFIX = "[background]"
-const CANGER_API = "https://canger.shanxiao.store"
+const CANGER_API = "https://canger.shanxiao.store/api"
 
 reloadOnUpdate("pages/background")
 
@@ -25,10 +25,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   switch (request.type) {
     case "chatgpt":
       askChatGPT(request.message.sentence, request.message.kind).then(res => {
-        console.info(`${BG_PREFIX} ChatGPT result: ${res}`)
         sendResponse({ result: res })
       })
       break
+    // 获取当前 tab url
     case "taburl":
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         sendResponse({ result: tabs[0].url })
@@ -40,8 +40,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       })
       break
     case "dictionary":
-      getDictionary(request.message).then(res => {
-        console.info(`${BG_PREFIX} dictionary result: ${res.errorCode}`)
+      wordTranslate(request.message).then(res => {
+        sendResponse({ result: res })
+      })
+      break
+    case "sentence":
+      sentenceTranslate(request.message).then(res => {
         sendResponse({ result: res })
       })
       break
@@ -93,8 +97,17 @@ const askChatGPT = async (sentence: string, kind: PromptKind) => {
   })
   return data.content
 }
-async function getDictionary(word: string) {
-  return await fetch(`${CANGER_API}/translate?word=${word}`, {
+async function wordTranslate(word: string) {
+  return await fetch(`${CANGER_API}/translate/word?word=${word}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then(res => res.json())
+}
+
+async function sentenceTranslate(sentence: string) {
+  return await fetch(`${CANGER_API}/translate/sentence?sentence=${sentence}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

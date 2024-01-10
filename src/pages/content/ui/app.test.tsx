@@ -1,16 +1,16 @@
-import App from "@pages/content/ui/app"
-import { render, screen } from "@testing-library/react"
-import { describe, test } from "vitest"
+import { describe, expect, test } from "vitest"
+import { isValidWord } from "./utils"
 
-describe("appTest", () => {
-  test("render text", () => {
-    // given
-    const text = "content view"
-
-    // when
-    render(<App />)
-
-    // then
-    screen.getByText(text)
+describe("UtilsTest", () => {
+  test.each([
+    ["hello", true],
+    ["hello ", true],
+    [" hello ", true],
+    [" ", false],
+    ["你好", false],
+    ["how are you", false],
+  ])("isValidWord(%s)", (word, expected) => {
+    const result = isValidWord(word)
+    expect(result).toBe(expected)
   })
 })
