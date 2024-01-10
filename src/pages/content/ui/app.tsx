@@ -4,10 +4,9 @@ import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStora
 import { useEffect } from "react"
 import { createRoot } from "react-dom/client"
 import { Container, ContainerM } from "./Container"
+import { DoubanContentFlow } from "./ContentFlow/Douban"
 import HighLight from "./components/HighLight"
 import { DEFAULT_DOMAINS_SELECTOR, DOMAINS_SELECTOR } from "./const"
-import { DoubanContentFlow } from "./contentFlow/Douban"
-import { isValidWord } from "./utils"
 
 export default function App() {
   const disabledDomain = useStorage(disabledDomainStorage)
@@ -51,9 +50,8 @@ function injectTransWord() {
 
   document.addEventListener("selectionchange", e => {
     const selection = window.getSelection()
-    const word = selection.toString().trim()
     const root = createRoot(container)
-    if (isValidWord(word)) {
+    if (selection.toString().trim() !== "") {
       root.render(<ContainerM selection={selection} />)
     }
   })
