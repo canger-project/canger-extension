@@ -96,5 +96,10 @@
       "prettier-plugin-organize-imports"
     ]
   },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "packageManager": "pnpm@8.9.2"
 }
