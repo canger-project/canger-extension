@@ -49,6 +49,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         sendResponse({ result: res })
       })
       break
+    case "photo":
+      getBingPhoto().then(res => {
+        sendResponse({ result: res })
+      })
+      break
     default:
       sendResponse({ result: "I'm groot." })
       break
@@ -113,4 +118,23 @@ async function sentenceTranslate(sentence: string) {
       "Content-Type": "application/json",
     },
   }).then(res => res.json())
+}
+
+async function getUnsplashPhoto() {
+  return await fetch(`${CANGER_API}/photo`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then(res => res.json())
+}
+
+async function getBingPhoto() {
+  return await fetch(`https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN`, {
+    method: "GET",
+  })
+    .then(res => res.json())
+    .then(data => {
+      return `https://cn.bing.com${data.images[0].url}`
+    })
 }
