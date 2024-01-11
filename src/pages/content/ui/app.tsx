@@ -20,14 +20,11 @@ export default function App() {
       window.addEventListener("load", () => {
         injectContentFlow()
         // 英文网站或者非禁用域名开启段落翻译和写作优化
-        const isLangEn = document.documentElement.lang.includes("en")
-        if (isLangEn) {
-          if (!disabledDomain.includes(domain)) {
-            // TODO: 提供是否开启高亮的选项
-            // injectHighLightWords()
-            injectTransParagraph()
-            injectTransInput()
-          }
+        if (!disabledDomain.includes(domain)) {
+          // TODO: 提供是否开启高亮的选项
+          // injectHighLightWords()
+          injectTransParagraph()
+          injectTransInput()
         }
         injectTransWord()
       })
