@@ -124,18 +124,20 @@ button:hover .tooltip {
 
 .word-panel .phonetic {
   display: flex;
-  font-size: 12px;
+  align-items: center;
+  font-size: 14px;
   color: #64748b;
   margin: 12px 0;
+  gap: 6px;
 }
+
 .word-panel .phonetic span {
   display: flex;
   align-items: center;
-  margin-right: 6px;
 }
 
 .word-panel .phonetic span :hover {
-  color: #ef4444;
+  color: #0f172a;
 }
 
 .word-highlight {

@@ -17,4 +17,8 @@ export const DOMAINS_SELECTOR: DomainSelector[] = [
     pattern: "https://github.com/*",
     selectors: ["task-lists p", "p"],
   },
+  {
+    pattern: "https://twitter.com/*",
+    selectors: ["div[lang='en']"],
+  },
 ]

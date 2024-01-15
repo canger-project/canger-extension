@@ -7,8 +7,8 @@ export default function WordPanel(props: { vocabulary: Vocabulary; selection: Se
   const wordDetail = vocabulary.detail
   const { top, left } = getSelectionPosition(selection)
 
-  const explains = wordDetail.basic.explains.map((item, index) => {
-    return <div key={index}>{item}</div>
+  const explains = wordDetail.basic.explains.map((explain, index) => {
+    return <div key={index}>{explain.split("；", 3).join("；")}</div>
   })
   const usPhonetic = wordDetail.basic["us-phonetic"]
   const ukPhonetic = wordDetail.basic["uk-phonetic"]
@@ -23,20 +23,35 @@ export default function WordPanel(props: { vocabulary: Vocabulary; selection: Se
         zIndex: 999999,
       }}>
       <div className="word-header">
-        <div className="word">{vocabulary.word}</div>
-        <span className="word-o">+{vocabulary.o}</span>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            gap: "6px",
+          }}>
+          <span className="word">{vocabulary.word}</span>
+          <span
+            className="word-o"
+            style={{
+              color: "#ef4444",
+              fontSize: "12px",
+              fontWeight: 500,
+            }}>
+            +{vocabulary.o}
+          </span>
+        </div>
       </div>
-      <div
-        style={{
-          display: "flex",
-          color: "#64748b",
-          margin: "12px 0",
-          fontSize: "12px",
-        }}>
+      <div className="phonetic">
         {usPhonetic && <Phonetic type="us" phonetic={usPhonetic} speechUrl={wordDetail.basic["us-speech"]} />}
         {ukPhonetic && <Phonetic type="uk" phonetic={ukPhonetic} speechUrl={wordDetail.basic["uk-speech"]} />}
       </div>
-      <div className="explains">{explains}</div>
+      <div
+        className="explains"
+        style={{
+          textAlign: "justify",
+        }}>
+        {explains}
+      </div>
     </div>
   )
 }
@@ -52,12 +67,7 @@ export function Phonetic(props: { type: "us" | "uk"; phonetic: string; speechUrl
   }
 
   return (
-    <span
-      style={{
-        display: "flex",
-        alignItems: "center",
-        marginRight: "6px",
-      }}>
+    <span>
       <svg
         onClick={handleClick}
         xmlns="http://www.w3.org/2000/svg"

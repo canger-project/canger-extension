@@ -8,12 +8,6 @@ import About from "./routers/About"
 import Settings from "./routers/Settings"
 import Words from "./routers/Words"
 
-const ROUTER_MAP = new Map([
-  ["/", "欢迎"],
-  ["/words", "背词模式"],
-  ["/about", "关于"],
-])
-
 export const Options: React.FC = () => {
   return (
     <Box my="8">
@@ -31,6 +25,12 @@ export const Options: React.FC = () => {
 
 const Layout: React.FC = () => {
   const location = useLocation()
+
+  const router_map = new Map([
+    ["/", "General"],
+    ["/words", "Words"],
+    ["/about", "About"],
+  ])
 
   return (
     <Grid gap={8} templateColumns="repeat(6, 1fr)">
@@ -60,15 +60,13 @@ const Layout: React.FC = () => {
             height: "calc(100vh - 120px)",
           }}>
           <Box display="flex" flexDirection="column" gap="2" mx="4" my="2">
-            <Link to={`/`}>
-              <Button width={"100%"}>欢迎</Button>
-            </Link>
-            <Link to={`/words`}>
-              <Button width={"100%"}>背词模式</Button>
-            </Link>
-            <Link to={`/about`}>
-              <Button width={"100%"}>关于</Button>
-            </Link>
+            {Array.from(router_map).map(([path, name]) => {
+              return (
+                <Link to={path} key={path}>
+                  <Button width={"100%"}>{name}</Button>
+                </Link>
+              )
+            })}
           </Box>
           <Flex alignItems="center" gap="2" justifyContent="center" textAlign="center">
             <Image src={brand} boxSize="32px"></Image>
@@ -78,7 +76,7 @@ const Layout: React.FC = () => {
       </GridItem>
 
       <GridItem colSpan={3} colStart={3} colEnd={6} pl="2">
-        <Text fontSize={"xl"}>{ROUTER_MAP.get(location.pathname)}</Text>
+        <Text fontSize={"xl"}>{router_map.get(location.pathname)}</Text>
         <Divider my="4" />
         <Outlet />
       </GridItem>
