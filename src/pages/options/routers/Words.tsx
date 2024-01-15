@@ -7,6 +7,11 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Select,
   Switch,
   Text,
@@ -19,6 +24,7 @@ import wordflowStorage from "@root/src/shared/storages/WordFlowStorage"
 export default function Words() {
   return (
     <Flex gap="4" direction="column">
+      <WordTarget />
       <Density />
       <SupportedDomain />
     </Flex>
@@ -101,6 +107,40 @@ function Density() {
             }}>
             {options}
           </Select>
+        </Flex>
+      </CardBody>
+    </Card>
+  )
+}
+
+// TODO: 同步数据到 storage
+function WordTarget() {
+  const toast = useToast()
+  const commonConfig = useStorage(commonStorage)
+  const options = ["low", "medium", "high"].map(option => {
+    const selected = commonConfig.wordLearnDensity === option
+    return (
+      <option value={option} selected={selected} key={option}>
+        {option}
+      </option>
+    )
+  })
+
+  return (
+    <Card>
+      <CardBody>
+        <Flex alignItems="center" justifyContent="space-between">
+          <Box>
+            <Heading size="md">单词目标</Heading>
+            <Text fontSize="sm">设置每日背单词的个数</Text>
+          </Box>
+          <NumberInput step={5} defaultValue={15} min={5}>
+            <NumberInputField />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
         </Flex>
       </CardBody>
     </Card>
