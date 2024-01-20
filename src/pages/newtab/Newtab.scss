@@ -1,13 +1,3 @@
-.word-phonetics {
-  display: flex;
-  justify-content: right;
-  align-items: center;
-}
-
-.icon {
-  // hover
-  &:hover {
-    border: 1px solid white;
-    border-radius: 50%;
-  }
+.flash-card {
+  width: 600px;
 }

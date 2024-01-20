@@ -5,10 +5,10 @@ export interface Common {
   onlyEnSite: boolean
   // 单词面板在各网站出现的密度
   wordLearnDensity: "low" | "medium" | "high"
-  // 记录背单词日期
-  wordLearnDate: string[]
   // 每日单词数
   dailyWordNum: number
+  // 记录背单词日期
+  dailyLearnedWordNum: Record<string, any>
 }
 
 type CommonStorage = BaseStorage<Common> & {
@@ -18,11 +18,11 @@ type CommonStorage = BaseStorage<Common> & {
 const DEFAULT_COMMON: Common = {
   onlyEnSite: false,
   wordLearnDensity: "low",
-  wordLearnDate: [],
   dailyWordNum: 10,
+  dailyLearnedWordNum: {},
 }
 
-const storage = createStorage<Common>("common-storage-key-test", DEFAULT_COMMON, {
+const storage = createStorage<Common>("canger-common-key", DEFAULT_COMMON, {
   storageType: StorageType.Local,
   liveUpdate: true,
 })

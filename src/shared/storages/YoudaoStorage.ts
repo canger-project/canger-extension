@@ -11,7 +11,7 @@ type YoudaoStorage = BaseStorage<YoudaoApp> & {
 }
 
 const storage = createStorage<YoudaoApp>(
-  "youdao-storage-key",
+  "canger-youdao-key",
   {
     appId: "",
     appScrect: "",

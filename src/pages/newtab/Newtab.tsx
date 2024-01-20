@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, Flex, Heading, Icon, Text } from "@chakra-ui/react"
+import { Box, Card, CardBody, Flex, Icon, IconButton, Text, Tooltip, useColorModeValue } from "@chakra-ui/react"
 import "@pages/newtab/Newtab.css"
 import "@pages/newtab/Newtab.scss"
 import withErrorBoundary from "@root/src/shared/hoc/withErrorBoundary"
@@ -6,151 +6,137 @@ import withSuspense from "@root/src/shared/hoc/withSuspense"
 import useStorage from "@root/src/shared/hooks/useStorage"
 import { commonStorage } from "@root/src/shared/storages/CommonStorage"
 import vocabularyStorage, { Vocabulary } from "@root/src/shared/storages/VocabularyStorage"
-import { IconChecks, IconConfetti, IconMoodHappy, IconX } from "@tabler/icons-react"
+import { IconChecks, IconConfetti, IconX } from "@tabler/icons-react"
 import moment from "moment"
 import { useEffect, useState } from "react"
+import Clock from "./components/Clock"
 import FlashCard from "./components/FlashCard"
+import Hello from "./components/Hello"
+import Progress from "./components/Progress"
+
+const day = moment().format("YYYYMMDD")
 
 function Newtab() {
+  const bg = useColorModeValue("slate.200", "slate.900")
   const commonConfig = useStorage(commonStorage)
 
   const [photo, setPhoto] = useState("")
   const [success, setSuccess] = useState(false)
+
+  const [allNewWords, setAllNewWords] = useState<Vocabulary[]>([])
   // 背词次数
-  const [count, setCount] = useState(0)
-  const [currentword, setCurrentword] = useState<Vocabulary>()
-  const [unknowWords, setUnknowWords] = useState([])
+  const [count, setCount] = useState(commonConfig.dailyLearnedWordNum[day] || 0)
+  // 单词卡动画
+  const [cardAnimate, setCardAnimate] = useState(false)
+  // 当前单词
+  const [currentWord, setCurrentWord] = useState<Vocabulary>()
 
   useEffect(() => {
     chrome.runtime.sendMessage({ type: "photo", message: "" }, resp => {
       setPhoto(resp.result)
     })
 
-    async function setWord() {
-      const newWord = await vocabularyStorage.getTopNewWord()
-      console.info(currentword)
-      setCurrentword(newWord)
+    async function _setWords() {
+      const newWords = await vocabularyStorage.getsAllNewWord()
+      setAllNewWords(newWords)
+      setCurrentWord(newWords.pop())
     }
-    setWord()
+    _setWords()
   }, [])
 
-  const sayHello = () => {
-    switch (moment().hour()) {
-      case 0:
-      case 1:
-      case 2:
-        return "夜深了，早点休息"
-      case 3:
-      case 4:
-      case 5:
-        return "凌晨了，早点休息"
-      case 6:
-      case 7:
-      case 8:
-        return "早上好"
-      case 9:
-      case 10:
-      case 11:
-        return "上午好"
-      case 12:
-      case 13:
-      case 14:
-        return "中午好"
-      case 15:
-      case 16:
-      case 17:
-        return "下午好"
-      case 18:
-      case 19:
-      case 20:
-        return "晚上好"
-      case 21:
-      case 22:
-      case 23:
-        return "夜深了，早点休息"
-      default:
-        return "早上好"
+  async function handleWordRemember(remembered: boolean) {
+    if (remembered) {
+      await vocabularyStorage.add({ ...currentWord, o: 0 })
     }
-  }
 
-  async function handleKnow() {
-    // 从单词本中随机取一个单词
-    const newWord = await vocabularyStorage.getTopNewWord()
-    if (count < commonConfig.dailyWordNum) {
-      await vocabularyStorage.add({ ...currentword, o: 0 })
-      setCount(count + 1)
-      setCurrentword(newWord)
-    } else if (unknowWords.length > 0) {
-      setCurrentword(unknowWords.pop())
-      setUnknowWords(unknowWords)
+    const newWordsTotal = await vocabularyStorage.newWordsTotal()
+    if (count < Math.min(newWordsTotal, commonConfig.dailyWordNum)) {
+      setCurrentWord(allNewWords.pop())
+      if (remembered) {
+        setCount(count + 1)
+        const dailyLearnedWordNum = commonConfig.dailyLearnedWordNum || {}
+        dailyLearnedWordNum[day] = count + 1
+        await commonStorage.add("dailyLearnedWordNum", dailyLearnedWordNum)
+      }
     } else {
       setSuccess(true)
     }
   }
 
-  const handleUnknow = () => {
-    setUnknowWords([...unknowWords, currentword])
-    handleKnow()
-  }
-
   return (
-    <Box
+    <Flex
       className="App"
+      gap={6}
       width="100vw"
       height="100vh"
-      backgroundImage={`url(${photo})`}
-      backgroundSize="cover"
-      backgroundRepeat="no-repeat"
-      backgroundPosition="center"
-      display="flex"
+      bg={bg}
+      direction="column"
       alignItems="center"
       justifyContent="center"
     >
-      <Flex gap={6} direction="column" alignItems="center" justifyContent="center" color="white">
-        <Clock />
-        <Heading size="md" display="flex" justifyContent="center" alignItems="center" my="6">
-          {currentword ? "美好的一天从背单词开始吧" : sayHello()}
-          <Icon as={IconMoodHappy} boxSize="6" />
-        </Heading>
+      <Clock />
+      <Hello HasNewWords={true} />
 
-        {success ? (
-          <Card width="100%">
-            <CardBody display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-              <Icon as={IconConfetti} boxSize="24" color="#ef4444" />
-              <Text fontSize="lg">恭喜你全都背完了！</Text>
-            </CardBody>
-          </Card>
-        ) : (
-          <>
-            {currentword && (
-              <Box>
-                (<FlashCard word={currentword} />
-                <Flex justifyContent="space-around" my="12">
-                  <Icon as={IconX} boxSize="32px" onClick={handleUnknow} className="icon" />
-                  <Icon as={IconChecks} boxSize="32px" onClick={handleKnow} className="icon" />
-                </Flex>
-                )
-              </Box>
-            )}
-          </>
-        )}
-      </Flex>
-    </Box>
+      {success ? (
+        <Card width="100%">
+          <CardBody display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+            <Icon as={IconConfetti} boxSize="24" color="#ef4444" />
+            <Text fontSize="lg">恭喜你全都背完了！</Text>
+          </CardBody>
+        </Card>
+      ) : (
+        <>
+          {currentWord && (
+            <Box>
+              <Progress count={count} />
+              <div
+                className={cardAnimate && "animate__animated animate__backOutRight animate__fast"}
+                onAnimationEnd={() => {
+                  handleWordRemember(true)
+                  setCardAnimate(false)
+                }}
+              >
+                <FlashCard word={currentWord} />
+              </div>
+              <Flex justifyContent="space-around" my="12">
+                <Btn
+                  name="先跳过"
+                  icon={<IconX />}
+                  handleClick={() => {
+                    handleWordRemember(false)
+                  }}
+                />
+                <Btn
+                  name="已掌握"
+                  icon={<IconChecks />}
+                  handleClick={() => {
+                    setCardAnimate(true)
+                  }}
+                />
+              </Flex>
+            </Box>
+          )}
+        </>
+      )}
+    </Flex>
   )
 }
 
-function Clock() {
-  const [time, setTime] = useState(new Date())
+function Btn(props: { name: string; icon: JSX.Element; handleClick: () => void }) {
+  const { name, icon, handleClick } = props
 
-  useEffect(() => {
-    setInterval(() => {
-      setTime(new Date())
-    }, 1000)
-  }, [])
   return (
-    <Heading size="3xl" fontWeight="800">
-      {moment(time).format("HH:mm")}
-    </Heading>
+    <Tooltip label={name} fontSize="md">
+      <IconButton
+        colorScheme="blue"
+        isRound={true}
+        variant="outline"
+        icon={icon}
+        aria-label={name}
+        size="lg"
+        onClick={handleClick}
+      />
+    </Tooltip>
   )
 }
 

@@ -5,7 +5,7 @@ type ChatGPTApiStorage = BaseStorage<string> & {
   delete: () => void
 }
 
-const storage = createStorage<string>("chatgpt-api-storage-key", "", {
+const storage = createStorage<string>("canger-chatgpt-key", "", {
   storageType: StorageType.Local,
   liveUpdate: true,
 })

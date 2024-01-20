@@ -32,6 +32,7 @@
     "@sentry/browser": "^7.93.0",
     "@sentry/vite-plugin": "^2.10.2",
     "@tabler/icons-react": "^2.45.0",
+    "animate.css": "^4.1.1",
     "construct-style-sheets-polyfill": "3.1.0",
     "crypto-js": "^4.2.0",
     "moment": "^2.30.1",
