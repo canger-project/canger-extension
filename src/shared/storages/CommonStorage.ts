@@ -22,7 +22,7 @@ const DEFAULT_COMMON: Common = {
   dailyWordNum: 10,
 }
 
-const storage = createStorage<Common>("common-storage-key", DEFAULT_COMMON, {
+const storage = createStorage<Common>("common-storage-key-test", DEFAULT_COMMON, {
   storageType: StorageType.Local,
   liveUpdate: true,
 })

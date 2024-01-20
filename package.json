@@ -36,6 +36,7 @@
     "crypto-js": "^4.2.0",
     "moment": "^2.30.1",
     "react": "18.2.0",
+    "react-card-flip": "^1.2.2",
     "react-dom": "18.2.0",
     "react-router-dom": "^6.21.1",
     "webextension-polyfill": "0.10.0"
@@ -91,7 +92,7 @@
     "singleQuote": false,
     "arrowParens": "avoid",
     "printWidth": 120,
-    "bracketSameLine": true,
+    "bracketSameLine": false,
     "htmlWhitespaceSensitivity": "strict",
     "plugins": [
       "prettier-plugin-organize-imports"

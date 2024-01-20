@@ -10,9 +10,10 @@ type VocabularyStorage = BaseStorage<Vocabulary[]> & {
   add: (word: Vocabulary) => Promise<void>
   find: (word: string) => Promise<Vocabulary> | undefined
   getsByO: () => Promise<Vocabulary[]>
+  getTopNewWord: () => Promise<Vocabulary>
 }
 
-const storage = createStorage<Vocabulary[]>("vocabulary-storage-key-test4", [], {
+const storage = createStorage<Vocabulary[]>("vocabulary-storage-key-test5", [], {
   storageType: StorageType.Local,
   liveUpdate: true,
 })
@@ -36,6 +37,10 @@ const vocabularyStorage: VocabularyStorage = {
   getsByO: () => {
     // filter o != 0 and order by o desc
     return storage.get().then(words => words.filter(w => w.o !== 0).sort((a, b) => b.o - a.o))
+  },
+
+  getTopNewWord: () => {
+    return storage.get().then(words => words.filter(w => w.o !== 0).sort((a, b) => b.o - a.o)[0])
   },
 }
 
