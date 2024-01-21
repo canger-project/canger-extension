@@ -21,7 +21,7 @@ const SupportedDomains = [
   },
 ]
 
-const storage = createStorage<Domain[]>("wordflow-storage-key-test2", SupportedDomains, {
+const storage = createStorage<Domain[]>("canger-wordflow-key", SupportedDomains, {
   storageType: StorageType.Local,
   liveUpdate: true,
 })

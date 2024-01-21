@@ -26,6 +26,9 @@ dependencies:
   '@tabler/icons-react':
     specifier: ^2.45.0
     version: 2.45.0(react@18.2.0)
+  animate.css:
+    specifier: ^4.1.1
+    version: 4.1.1
   construct-style-sheets-polyfill:
     specifier: 3.1.0
     version: 3.1.0
@@ -38,6 +41,9 @@ dependencies:
   react:
     specifier: 18.2.0
     version: 18.2.0
+  react-card-flip:
+    specifier: ^1.2.2
+    version: 1.2.2(react-dom@18.2.0)(react@18.2.0)
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
@@ -3074,6 +3080,10 @@ packages:
       uri-js: 4.4.1
     dev: true
 
+  /animate.css@4.1.1:
+    resolution: {integrity: sha512-+mRmCTv6SbCmtYJCN4faJMNFVNN5EuCTTprDTAo7YzIGji2KADmakjVA3+8mVDkZ2Bf09vayB35lSQIex2+QaQ==}
+    dev: false
+
   /ansi-escapes@5.0.0:
     resolution: {integrity: sha512-5GFMVX8HqE/TB+FuBJGuO5XG0WrsA6ptUqoODaT/n9mmUaZFkqnBueB4leqGBCmrUHnCnC4PCZTCd0E7QQ83bA==}
     engines: {node: '>=12'}
@@ -5958,6 +5968,16 @@ packages:
     dependencies:
       safe-buffer: 5.2.1
     dev: true
+
+  /react-card-flip@1.2.2(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-EGAdHsH0OIU3Rbfevr8bZB0yN/zBj2Jq9bvtNfyFKYWUjx7zTF+4aEJF7BzA4mRr2pb1nHRWmZFRtA9rOArcoA==}
+    peerDependencies:
+      react: ^18.2.0
+      react-dom: ^18.2.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
 
   /react-clientside-effect@1.2.6(react@18.2.0):
     resolution: {integrity: sha512-XGGGRQAKY+q25Lz9a/4EPqom7WRjz3z9R2k4jhVKA/puQFH/5Nt27vFZYql4m4NVNdUvX8PS3O7r/Zzm7cjUlg==}

@@ -13,7 +13,7 @@ type disabledDomainStorage = BaseStorage<disabledDomain> & {
   exists: (domain: string) => Promise<boolean>
 }
 
-const storage = createStorage<disabledDomain>("disabled-domain-storage-key", [], {
+const storage = createStorage<disabledDomain>("canger-disabled-domain-key", [], {
   storageType: StorageType.Local,
   liveUpdate: true,
 })

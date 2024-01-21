@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client"
 import Panel from "./Panel"
 
 export async function DoubanContentFlow(domain: string, density: string) {
-  const vocabulary = await vocabularyStorage.getsByO()
+  const vocabulary = await vocabularyStorage.getsAllNewWord()
 
   if (vocabulary.length > 0) {
     const domainUrl = new URL(domain)
@@ -66,7 +66,8 @@ function Status(props: { word: Vocabulary }) {
       className={`new-status status-wrapper saying canger-word-${word.word}`}
       style={{
         padding: "20px 0",
-      }}>
+      }}
+    >
       <div className="status-item">
         <div className="mod">
           <div className="hd">
@@ -111,13 +112,15 @@ function Subject(props: { word: Vocabulary }) {
         marginBottom: "40px",
         background: "#F0F3F5",
         fontSize: "13px",
-      }}>
+      }}
+    >
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-        }}>
+        }}
+      >
         <h2>{word.word}</h2>
         <div>查词次数 {word.o}</div>
       </div>

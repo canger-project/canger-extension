@@ -75,6 +75,7 @@ function SupportedDomain() {
 function Density() {
   const toast = useToast()
   const commonConfig = useStorage(commonStorage)
+
   const options = ["low", "medium", "high"].map(option => {
     const selected = commonConfig.wordLearnDensity === option
     return (
@@ -104,7 +105,8 @@ function Density() {
                 duration: 1000,
                 isClosable: true,
               })
-            }}>
+            }}
+          >
             {options}
           </Select>
         </Flex>
@@ -113,18 +115,9 @@ function Density() {
   )
 }
 
-// TODO: 同步数据到 storage
 function WordTarget() {
   const toast = useToast()
   const commonConfig = useStorage(commonStorage)
-  const options = ["low", "medium", "high"].map(option => {
-    const selected = commonConfig.wordLearnDensity === option
-    return (
-      <option value={option} selected={selected} key={option}>
-        {option}
-      </option>
-    )
-  })
 
   return (
     <Card>
@@ -134,7 +127,21 @@ function WordTarget() {
             <Heading size="md">单词目标</Heading>
             <Text fontSize="sm">设置每日背单词的个数</Text>
           </Box>
-          <NumberInput step={5} defaultValue={15} min={5}>
+          <NumberInput
+            step={5}
+            value={commonConfig.dailyWordNum}
+            min={5}
+            onChange={async valueAsNumber => {
+              await commonStorage.add("dailyWordNum", valueAsNumber)
+              toast({
+                title: `已保存`,
+                position: "top",
+                status: "success",
+                duration: 1000,
+                isClosable: true,
+              })
+            }}
+          >
             <NumberInputField />
             <NumberInputStepper>
               <NumberIncrementStepper />
