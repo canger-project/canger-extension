@@ -1,7 +1,6 @@
 import Logo from "@assets/img/logo.svg"
 import vocabularyStorage, { Vocabulary } from "@root/src/shared/storages/VocabularyStorage"
-import { ReactNode } from "react"
-import { createRoot } from "react-dom/client"
+import { Container } from "."
 import Panel from "./Panel"
 
 export async function DoubanContentFlow(domain: string, density: string) {
@@ -15,7 +14,6 @@ export async function DoubanContentFlow(domain: string, density: string) {
           const page = parseInt(domainUrl.searchParams.get("p") || "1", 10)
 
           const stream = document.getElementsByClassName("stream-items")[0]
-          console.info("density: ", density)
           const d = () => {
             if (density === "low") {
               return 2
@@ -49,13 +47,6 @@ export async function DoubanContentFlow(domain: string, density: string) {
       }
     }
   }
-}
-
-function Container(reactNode: ReactNode) {
-  const container = document.createElement("div")
-  const root = createRoot(container)
-  root.render(reactNode)
-  return container
 }
 
 function Status(props: { word: Vocabulary }) {
