@@ -1,4 +1,16 @@
-import { Box, Divider, Flex, FormControl, FormLabel, Icon, Image, Link, Switch, Text } from "@chakra-ui/react"
+import {
+  Box,
+  Divider,
+  Flex,
+  FormControl,
+  FormLabel,
+  Icon,
+  IconButton,
+  Image,
+  Link,
+  Switch,
+  Text,
+} from "@chakra-ui/react"
 import "@pages/popup/Popup.css"
 import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStorage"
 import withErrorBoundary from "@src/shared/hoc/withErrorBoundary"
@@ -56,14 +68,13 @@ const Popup: React.FC = () => {
           <Image src="/logo.svg" boxSize={6} />
           <Text fontSize="md">苍耳</Text>
         </Flex>
-        <Icon
-          as={IconSettings}
-          boxSize={6}
+        <IconButton
+          icon={<IconSettings />}
+          aria-label="settings"
           onClick={handleSettings}
-          color="#1e293b"
-          _hover={{
-            color: "#020617",
-          }}
+          variant="solid"
+          isRound={true}
+          size="sm"
         />
       </Flex>
       <Divider />

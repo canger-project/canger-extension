@@ -40,19 +40,22 @@ export default function Panel(props: { word: Vocabulary; mainStyle: any }) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-        }}>
+        }}
+      >
         <h2
           style={{
             color: "#020617",
             fontSize: "1.25em",
             fontWeight: 700,
-          }}>
+          }}
+        >
           {word.word}
         </h2>
         <span
           onClick={async e => {
             await handleClick(e)
-          }}>
+          }}
+        >
           <svg
             onMouseOver={e => {
               e.currentTarget.style.color = "#FF0000"
@@ -68,7 +71,8 @@ export default function Panel(props: { word: Vocabulary; mainStyle: any }) {
             stroke="currentColor"
             fill="none"
             strokeLinecap="round"
-            strokeLinejoin="round">
+            strokeLinejoin="round"
+          >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M7 12l5 5l10 -10" />
             <path d="M2 12l5 5m5 -5l5 -5" />
@@ -81,7 +85,8 @@ export default function Panel(props: { word: Vocabulary; mainStyle: any }) {
           display: "flex",
           margin: "4px 0",
           color: "#64748b",
-        }}>
+        }}
+      >
         {usPhonetic && <Phonetic type="us" phonetic={usPhonetic} speechUrl={wordDetail.basic["us-speech"]} />}
         {ukPhonetic && <Phonetic type="uk" phonetic={ukPhonetic} speechUrl={wordDetail.basic["uk-speech"]} />}
       </div>
@@ -91,7 +96,8 @@ export default function Panel(props: { word: Vocabulary; mainStyle: any }) {
           display: "flex",
           justifyContent: "right",
           color: "#64748b",
-        }}>
+        }}
+      >
         查词次数 {word.o}
       </div>
     </div>

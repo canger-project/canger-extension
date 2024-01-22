@@ -1,4 +1,17 @@
-import { Box, Card, CardBody, Flex, Icon, IconButton, Text, Tooltip, useColorModeValue } from "@chakra-ui/react"
+import SvgCollecting from "@assets/img/collecting.svg"
+import SvgWinners from "@assets/img/winners.svg"
+import {
+  Box,
+  Card,
+  CardBody,
+  Flex,
+  Heading,
+  IconButton,
+  Image,
+  Text,
+  Tooltip,
+  useColorModeValue,
+} from "@chakra-ui/react"
 import "@pages/newtab/Newtab.css"
 import "@pages/newtab/Newtab.scss"
 import withErrorBoundary from "@root/src/shared/hoc/withErrorBoundary"
@@ -6,7 +19,7 @@ import withSuspense from "@root/src/shared/hoc/withSuspense"
 import useStorage from "@root/src/shared/hooks/useStorage"
 import { commonStorage } from "@root/src/shared/storages/CommonStorage"
 import vocabularyStorage, { Vocabulary } from "@root/src/shared/storages/VocabularyStorage"
-import { IconChecks, IconConfetti, IconX } from "@tabler/icons-react"
+import { IconChecks, IconX } from "@tabler/icons-react"
 import moment from "moment"
 import { useEffect, useState } from "react"
 import Clock from "./components/Clock"
@@ -17,31 +30,29 @@ import Progress from "./components/Progress"
 const day = moment().format("YYYYMMDD")
 
 function Newtab() {
-  const bg = useColorModeValue("slate.200", "slate.900")
+  const bg = useColorModeValue("#f1f5f9", "#0f172a")
   const commonConfig = useStorage(commonStorage)
+  const curDayLearnedWordCount = commonConfig.dailyLearnedWordNum[day] || 0
 
-  const [photo, setPhoto] = useState("")
   const [success, setSuccess] = useState(false)
 
   const [allNewWords, setAllNewWords] = useState<Vocabulary[]>([])
-  // 背词次数
-  const [count, setCount] = useState(commonConfig.dailyLearnedWordNum[day] || 0)
   // 单词卡动画
   const [cardAnimate, setCardAnimate] = useState(false)
   // 当前单词
   const [currentWord, setCurrentWord] = useState<Vocabulary>()
 
   useEffect(() => {
-    chrome.runtime.sendMessage({ type: "photo", message: "" }, resp => {
-      setPhoto(resp.result)
-    })
-
     async function _setWords() {
       const newWords = await vocabularyStorage.getsAllNewWord()
       setAllNewWords(newWords)
       setCurrentWord(newWords.pop())
     }
     _setWords()
+
+    if (curDayLearnedWordCount >= commonConfig.dailyWordNum) {
+      setSuccess(true)
+    }
   }, [])
 
   async function handleWordRemember(remembered: boolean) {
@@ -49,13 +60,11 @@ function Newtab() {
       await vocabularyStorage.add({ ...currentWord, o: 0 })
     }
 
-    const newWordsTotal = await vocabularyStorage.newWordsTotal()
-    if (count < Math.min(newWordsTotal, commonConfig.dailyWordNum)) {
+    if (curDayLearnedWordCount < commonConfig.dailyWordNum) {
       setCurrentWord(allNewWords.pop())
       if (remembered) {
-        setCount(count + 1)
         const dailyLearnedWordNum = commonConfig.dailyLearnedWordNum || {}
-        dailyLearnedWordNum[day] = count + 1
+        dailyLearnedWordNum[day] += 1
         await commonStorage.add("dailyLearnedWordNum", dailyLearnedWordNum)
       }
     } else {
@@ -77,47 +86,53 @@ function Newtab() {
       <Clock />
       <Hello HasNewWords={true} />
 
-      {success ? (
-        <Card width="100%">
-          <CardBody display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-            <Icon as={IconConfetti} boxSize="24" color="#ef4444" />
-            <Text fontSize="lg">恭喜你全都背完了！</Text>
-          </CardBody>
-        </Card>
-      ) : (
-        <>
-          {currentWord && (
-            <Box>
-              <Progress count={count} />
-              <div
-                className={cardAnimate && "animate__animated animate__backOutRight animate__fast"}
-                onAnimationEnd={() => {
-                  handleWordRemember(true)
-                  setCardAnimate(false)
+      <Box>
+        <Progress />
+        {success ? (
+          <Card h="280px" w="600px">
+            <CardBody display="flex" justifyContent="center" alignItems="center" flexDirection="column" gap="2">
+              <Image src={SvgWinners} alt="winners" boxSize="150px" />
+              <Text fontSize="lg">恭喜你全都背完了！</Text>
+            </CardBody>
+          </Card>
+        ) : currentWord ? (
+          <Box>
+            <div
+              className={cardAnimate && "animate__animated animate__backOutRight animate__fast"}
+              onAnimationEnd={() => {
+                handleWordRemember(true)
+                setCardAnimate(false)
+              }}
+            >
+              <FlashCard word={currentWord} />
+            </div>
+            <Flex justifyContent="space-around" my="12">
+              <Btn
+                name="先跳过"
+                icon={<IconX />}
+                handleClick={() => {
+                  // FIXME: 未记住的单词，下次还会出现
+                  handleWordRemember(false)
                 }}
-              >
-                <FlashCard word={currentWord} />
-              </div>
-              <Flex justifyContent="space-around" my="12">
-                <Btn
-                  name="先跳过"
-                  icon={<IconX />}
-                  handleClick={() => {
-                    handleWordRemember(false)
-                  }}
-                />
-                <Btn
-                  name="已掌握"
-                  icon={<IconChecks />}
-                  handleClick={() => {
-                    setCardAnimate(true)
-                  }}
-                />
-              </Flex>
-            </Box>
-          )}
-        </>
-      )}
+              />
+              <Btn
+                name="已掌握"
+                icon={<IconChecks />}
+                handleClick={() => {
+                  setCardAnimate(true)
+                }}
+              />
+            </Flex>
+          </Box>
+        ) : (
+          <Card h="280px" w="600px">
+            <CardBody display="flex" justifyContent="center" alignItems="center" flexDirection="column" gap="2">
+              <Image src={SvgCollecting} alt="collecting" boxSize="150px" />
+              <Heading size="md">没有生词了，去积累一些吧！</Heading>
+            </CardBody>
+          </Card>
+        )}
+      </Box>
     </Flex>
   )
 }
@@ -128,7 +143,7 @@ function Btn(props: { name: string; icon: JSX.Element; handleClick: () => void }
   return (
     <Tooltip label={name} fontSize="md">
       <IconButton
-        colorScheme="blue"
+        colorScheme="indigo"
         isRound={true}
         variant="outline"
         icon={icon}

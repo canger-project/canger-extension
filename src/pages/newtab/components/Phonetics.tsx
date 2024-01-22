@@ -60,11 +60,11 @@ function Phonetic(props: {
         aria-label="volume"
         icon={<IconVolume size="18" />}
         isRound={true}
-        colorScheme="blue"
+        colorScheme="indigo"
         variant="outline"
         size="xs"
       />
-      <Text fontSize="md">
+      <Text fontSize="lg">
         {typeCN}[{phonetic}]
       </Text>
     </Box>

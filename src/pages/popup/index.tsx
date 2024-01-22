@@ -1,37 +1,36 @@
-import { ChakraProvider, theme as chakraTheme, extendBaseTheme } from "@chakra-ui/react"
+import { ColorModeScript, theme } from "@chakra-ui/react"
 import Popup from "@pages/popup/Popup"
 import "@pages/popup/index.css"
+import { ChakraUIProvider } from "@root/src/shared/ChakraProvider"
 import { createRoot } from "react-dom/client"
 import refreshOnUpdate from "virtual:reload-on-update-in-view"
 
 refreshOnUpdate("pages/popup")
 
-const { Button, FormLabel, Switch, Divider, Heading } = chakraTheme.components
-const theme = extendBaseTheme({
-  components: {
-    Button,
-    FormLabel,
-    Switch,
-    Divider,
-    Heading,
-  },
-})
-
 function App() {
   return (
-    <ChakraProvider>
+    <ChakraUIProvider>
       <Popup />
-    </ChakraProvider>
+    </ChakraUIProvider>
+  )
+}
+
+function Root() {
+  return (
+    <>
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <App />
+    </>
   )
 }
 
 function init() {
-  const appContainer = document.querySelector("#app-container")
+  const appContainer = document.querySelector("#canger-app")
   if (!appContainer) {
-    throw new Error("Can not find #app-container")
+    throw new Error("Can not find #canger-app")
   }
   const root = createRoot(appContainer)
-  root.render(<App />)
+  root.render(<Root />)
 }
 
 init()

@@ -96,6 +96,7 @@ function Density() {
 
           <Select
             width="fit-content"
+            colorScheme="indigo"
             onChange={async e => {
               await commonStorage.add("wordLearnDensity", e.target.value)
               toast({
@@ -128,6 +129,7 @@ function WordTarget() {
             <Text fontSize="sm">设置每日背单词的个数</Text>
           </Box>
           <NumberInput
+            colorScheme="indigo"
             step={5}
             value={commonConfig.dailyWordNum}
             min={5}

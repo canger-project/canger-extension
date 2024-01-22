@@ -21,22 +21,25 @@ export default function WordPanel(props: { vocabulary: Vocabulary; selection: Se
         top: top + 24 + "px",
         left: left + "px",
         zIndex: 999999,
-      }}>
+      }}
+    >
       <div className="word-header">
         <div
           style={{
             display: "flex",
             alignItems: "flex-start",
             gap: "6px",
-          }}>
-          <span className="word">{vocabulary.word}</span>
+          }}
+        >
+          <span className="word">{vocabulary.word.charAt(0).toUpperCase() + vocabulary.word.slice(1)}</span>
           <span
             className="word-o"
             style={{
-              color: "#ef4444",
+              color: "#6366f1",
               fontSize: "12px",
-              fontWeight: 500,
-            }}>
+              fontWeight: 900,
+            }}
+          >
             +{vocabulary.o}
           </span>
         </div>
@@ -49,7 +52,8 @@ export default function WordPanel(props: { vocabulary: Vocabulary; selection: Se
         className="explains"
         style={{
           textAlign: "justify",
-        }}>
+        }}
+      >
         {explains}
       </div>
     </div>
@@ -78,11 +82,12 @@ export function Phonetic(props: { type: "us" | "uk"; phonetic: string; speechUrl
         stroke="currentColor"
         fill="none"
         strokeLinecap="round"
-        strokeLinejoin="round">
+        strokeLinejoin="round"
+      >
         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-        <path d="M18 8a3 3 0 0 1 0 6" />
-        <path d="M10 8v11a1 1 0 0 1 -1 1h-1a1 1 0 0 1 -1 -1v-5" />
-        <path d="M12 8h0l4.524 -3.77a.9 .9 0 0 1 1.476 .692v12.156a.9 .9 0 0 1 -1.476 .692l-4.524 -3.77h-8a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h8" />
+        <path d="M15 8a5 5 0 0 1 0 8" />
+        <path d="M17.7 5a9 9 0 0 1 0 14" />
+        <path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a.8 .8 0 0 1 1.5 .5v14a.8 .8 0 0 1 -1.5 .5l-3.5 -4.5" />
       </svg>
       {typeCN}[{phonetic}]
     </span>

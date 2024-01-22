@@ -26,3 +26,23 @@ export function ContainerFlowContainer(reactNode: ReactNode) {
   root.render(reactNode)
   return container
 }
+
+export function getEleTop(ele: HTMLElement) {
+  let actualTop = ele.offsetTop
+  let current = ele.offsetParent as HTMLElement
+  while (current !== null) {
+    actualTop += current.offsetTop
+    current = current.offsetParent as HTMLElement
+  }
+  return actualTop
+}
+
+export function getEleLeft(ele: HTMLElement) {
+  let actualLeft = ele.offsetLeft
+  let current = ele.offsetParent as HTMLElement
+  while (current !== null) {
+    actualLeft += current.offsetLeft
+    current = current.offsetParent as HTMLElement
+  }
+  return actualLeft
+}

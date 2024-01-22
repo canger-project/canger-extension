@@ -1,6 +1,7 @@
-import { ChakraProvider } from "@chakra-ui/react"
+import { ColorModeScript, theme } from "@chakra-ui/react"
 import { Options } from "@pages/options/Options"
 import "@pages/options/index.css"
+import { ChakraUIProvider } from "@root/src/shared/ChakraProvider"
 import * as Sentry from "@sentry/browser"
 import { createRoot } from "react-dom/client"
 import { MemoryRouter } from "react-router-dom"
@@ -30,20 +31,27 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0,
 })
 
+function App() {
+  return (
+    <ChakraUIProvider>
+      <Options />
+    </ChakraUIProvider>
+  )
+}
+
 function Root() {
   return (
-    <ChakraProvider>
-      <MemoryRouter>
-        <Options />
-      </MemoryRouter>
-    </ChakraProvider>
+    <MemoryRouter>
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <App />
+    </MemoryRouter>
   )
 }
 
 function init() {
-  const appContainer = document.querySelector("#app-container")
+  const appContainer = document.querySelector("#canger-app")
   if (!appContainer) {
-    throw new Error("Can not find #app-container")
+    throw new Error("Can not find #canger-app")
   }
   const root = createRoot(appContainer)
   root.render(<Root />)

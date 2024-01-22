@@ -47,7 +47,7 @@ export default function FlashCard(props: { word: Vocabulary }) {
           <Card h="280">
             <CardBody display="flex" flexDirection="column" justifyContent="center" alignItems="center" gap="4">
               <Heading size="2xl" textAlign="center">
-                {word.word}
+                {word.word.charAt(0).toUpperCase() + word.word.slice(1)}
               </Heading>
               <Phonetics
                 detail={detail}
