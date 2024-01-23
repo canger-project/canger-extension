@@ -1,6 +1,6 @@
 <div align="center">
 <img src="public/icons/icon128.png" alt="logo"/>
-<h1>苍耳 Canger</h1>
+<h1>Canger</h1>
 
 ![](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)
 ![](https://img.shields.io/badge/Typescript-3178C6?style=flat-square&logo=typescript&logoColor=white)
@@ -15,24 +15,6 @@
 >
 > 在 v1.0 版本之前，本项目仍处于开发阶段，不提供 Chrome 商店安装包，请自行下载并以开发者模式安装。
 
-## 介绍
-
-这里是苍耳的浏览器插件仓库。苍耳帮助你学习和提升英语水平。在你阅读英语文章时，它可以帮助你快速的翻译单词和句子；在你回复帖子时，它可以帮助你翻译为英文并不断优化你的表达。
-
-### 特点
-
-- [x] 划词翻译
-- [x] 段落翻译
-- [x] 文本输入时辅助翻译和优化
-
-- ### 划词翻译、段落翻译
-
-![demo](demo/demo1.gif)
-
-- ### 输入时翻译与优化
-
-![demo](demo/demo2.gif)
-
 ## 安装
 
 克隆本项目，执行：
@@ -43,11 +25,32 @@ pnpm run build
 
 在浏览器扩展程序界面点击加载已解压的扩展程序（注意打开开发者模式），加载 `dist` 目录即可。
 
+目前仅支持 Chrome 浏览器（其他相同内核的浏览器应该也可以，未测试），Firefox 暂未测试。
 
-或者在 [Release](https://github.com/ischaojie/canger-extension/releases) 页面下载最新的 `canger-chrome-<version>.zip` 压缩包，解压后在 Chrome 的扩展程序页面以开发者模式加载即可。
+## 介绍
 
-目前仅支持 Chrome 浏览器。
+Canger 帮助你学习和提升英语水平。在你阅读英语文章时，它可以帮助你快速的翻译单词和句子；在你回复帖子时，它可以帮助你翻译并不断优化你的表达。同时，查询过的单词将以单词卡片的形式出现在新标签页和一些常见的网站内容流中，帮助你你随时随地记单词。
+
+## 功能速览
+
+- ### 划词翻译、段落翻译
+
+![demo](demo/demo1.gif)
+
+- ### 优化你的输入表达
+
+![demo](demo/demo2.gif)
+
+- ### 背单词
+
+可以在浏览器新标签页背单词。
+
+![demo](demo/newtab.jpg)
+
+或者在浏览网站时随时随地记单词。
+
+![demo](demo/douban-word.jpg)
 
 ---
 
-请注意本项目的开源许可方式。
+请注意本项目的开源许可方式：GPL-3.0。
