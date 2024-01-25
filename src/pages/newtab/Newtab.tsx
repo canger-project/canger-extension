@@ -64,7 +64,7 @@ function Newtab() {
       setCurrentWord(allNewWords.pop())
       if (remembered) {
         const dailyLearnedWordNum = commonConfig.dailyLearnedWordNum || {}
-        dailyLearnedWordNum[day] += 1
+        dailyLearnedWordNum[day] = dailyLearnedWordNum[day] ? dailyLearnedWordNum[day] + 1 : 1
         await commonStorage.add("dailyLearnedWordNum", dailyLearnedWordNum)
       }
     } else {

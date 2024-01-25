@@ -1,7 +1,7 @@
 import { Box, Flex, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text } from "@chakra-ui/react"
 import useStorage from "@root/src/shared/hooks/useStorage"
 import { commonStorage } from "@root/src/shared/storages/CommonStorage"
-import { IconPacman } from "@tabler/icons-react"
+import { IconPokeball } from "@tabler/icons-react"
 import moment from "moment"
 
 export default function Progress() {
@@ -22,7 +22,7 @@ export default function Progress() {
           <SliderFilledTrack />
         </SliderTrack>
         <SliderThumb boxSize={6}>
-          <Box as={IconPacman} color="indigo.600" />
+          <Box as={IconPokeball} color="indigo.500" />
         </SliderThumb>
       </Slider>
       <Text>
