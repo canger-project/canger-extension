@@ -15,7 +15,8 @@ export default function App() {
     chrome.runtime.sendMessage({ type: "taburl", message: "" }, resp => {
       const currentUrl = resp.result
       const domain = new URL(currentUrl).hostname
-      window.addEventListener("load", () => {
+
+      function inject() {
         injectContentFlow()
         // 英文网站或者非禁用域名开启段落翻译和写作优化
         if (!disabledDomain.includes(domain)) {
@@ -25,7 +26,13 @@ export default function App() {
           injectTransInput()
         }
         injectTransWord()
-      })
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", inject)
+      } else {
+        inject()
+      }
     })
   }, [disabledDomain])
 
