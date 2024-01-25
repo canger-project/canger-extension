@@ -30,9 +30,9 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@geist-ui/core": "^2.3.8",
-    "@sentry/browser": "^7.93.0",
-    "@sentry/vite-plugin": "^2.10.2",
-    "@tabler/icons-react": "^2.45.0",
+    "@sentry/browser": "^7.96.0",
+    "@sentry/vite-plugin": "^2.10.3",
+    "@tabler/icons-react": "^2.46.0",
     "animate.css": "^4.1.1",
     "construct-style-sheets-polyfill": "3.1.0",
     "crypto-js": "^4.2.0",
@@ -41,7 +41,7 @@
     "react": "18.2.0",
     "react-card-flip": "^1.2.2",
     "react-dom": "18.2.0",
-    "react-router-dom": "^6.21.1",
+    "react-router-dom": "^6.21.3",
     "webextension-polyfill": "0.10.0"
   },
   "devDependencies": {
@@ -79,7 +79,7 @@
     "ts-loader": "9.5.0",
     "tslib": "2.6.2",
     "typescript": "5.2.2",
-    "vite": "^5.0.11",
+    "vite": "^5.0.12",
     "vitest": "^0.34.6",
     "ws": "8.14.2"
   },
