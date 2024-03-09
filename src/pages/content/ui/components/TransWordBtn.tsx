@@ -1,5 +1,5 @@
 import useStorage from "@root/src/shared/hooks/useStorage"
-import vocabularyStorage, { Vocabulary } from "@root/src/shared/storages/VocabularyStorage"
+import { Vocabulary, vocabularyStorage } from "@root/src/shared/storages/VocabularyStorage"
 import { IconTransformFilled } from "@tabler/icons-react"
 import { useState } from "react"
 import { createRoot } from "react-dom/client"

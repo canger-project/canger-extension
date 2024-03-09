@@ -9,7 +9,7 @@ export function injectTransInput() {
   const allTextarea = document.querySelectorAll("textarea")
 
   allTextarea.forEach(textarea => {
-    textarea.addEventListener("focus", event => {
+    textarea.addEventListener("focus", e => {
       setTimeout(() => {
         createRoot(container).render(<Container ele={textarea} type="input" />)
       }, 200)

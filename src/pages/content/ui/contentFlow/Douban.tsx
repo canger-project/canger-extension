@@ -1,33 +1,24 @@
 import Logo from "@assets/img/logo.svg"
-import vocabularyStorage, { Vocabulary } from "@root/src/shared/storages/VocabularyStorage"
+import { commonStorage } from "@root/src/shared/storages/CommonStorage"
+import { Vocabulary, vocabularyStorage } from "@root/src/shared/storages/VocabularyStorage"
 import { Container } from "."
+import { InsertWordsByDensity } from "../utils"
 import Panel from "./Panel"
 
 export async function DoubanContentFlow(domain: string, density: string) {
-  const vocabulary = await vocabularyStorage.getsAllNewWord()
+  const dailyWordNum = await commonStorage.get().then(common => common.dailyWordNum)
+  const vocabulary = await vocabularyStorage.getsNewWord(dailyWordNum)
 
+  // 从生词中取查词数最多的 n 个（由每日背词量控制），
+  // 随机出现在内容流的不同位置（由设置中密度控制）
   if (vocabulary.length > 0) {
     const domainUrl = new URL(domain)
     switch (domainUrl.hostname) {
       case "www.douban.com": {
         if (domainUrl.pathname === "/") {
-          const page = parseInt(domainUrl.searchParams.get("p") || "1", 10)
-
           const stream = document.getElementsByClassName("stream-items")[0]
-          const d = () => {
-            if (density === "low") {
-              return 2
-            } else if (density === "medium") {
-              return ~~(stream.children.length / 3)
-            } else if (density === "high") {
-              return stream.children.length - 2
-            }
-          }
-          vocabulary.slice(page, d() * page + d()).forEach((word, index) => {
-            stream.insertBefore(
-              Container(<Status word={word} />),
-              stream.children[index * ~~(stream.children.length / d() + 1)],
-            )
+          InsertWordsByDensity(density as "low" | "medium" | "high", stream, vocabulary, word => {
+            return Container(<Status word={word} />)
           })
         }
         break
@@ -70,9 +61,9 @@ function Status(props: { word: Vocabulary }) {
 
             <div className="text">
               <a href="" className="lnk-people">
-                苍耳
+                苍耳单词
               </a>
-              &nbsp;背个单词吧
+              &nbsp;生词
             </div>
           </div>
 

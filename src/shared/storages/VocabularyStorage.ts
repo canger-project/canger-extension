@@ -3,7 +3,31 @@ import { BaseStorage, createStorage, StorageType } from "@src/shared/storages/ba
 export type Vocabulary = {
   word: string
   o: number
-  detail: any
+  detail: VocabularyDetail
+}
+
+type VocabularyDetail = {
+  basic: Basic
+  dict: any
+  errorCode: string
+  isWord: boolean
+  l: string
+  query: string
+  speakUrl: string
+  tSpeakUrl: string
+  web: any
+  translation: string[]
+  webdict: any
+}
+
+type Basic = {
+  explains: string[]
+  phonetic: string
+  uk_phonetic: string
+  uk_speech: string
+  us_phonetic: string
+  us_speech: string
+  exam_type: string[]
 }
 
 type VocabularyStorage = BaseStorage<Vocabulary[]> & {
@@ -11,6 +35,7 @@ type VocabularyStorage = BaseStorage<Vocabulary[]> & {
   find: (word: string) => Promise<Vocabulary> | undefined
   getsAllNewWord: () => Promise<Vocabulary[]>
   getTopNewWord: () => Promise<Vocabulary>
+  getsNewWord: (num: number) => Promise<Vocabulary[]>
   newWordsTotal: () => Promise<number>
 }
 
@@ -19,7 +44,7 @@ const storage = createStorage<Vocabulary[]>("canger-vocabulary-key", [], {
   liveUpdate: true,
 })
 
-const vocabularyStorage: VocabularyStorage = {
+export const vocabularyStorage: VocabularyStorage = {
   ...storage,
   add: async (word: Vocabulary) => {
     const words = await storage.get()
@@ -47,6 +72,13 @@ const vocabularyStorage: VocabularyStorage = {
   newWordsTotal: () => {
     return storage.get().then(words => words.filter(w => w.o !== 0).length)
   },
-}
 
-export default vocabularyStorage
+  getsNewWord: (num: number) => {
+    return storage.get().then(words =>
+      words
+        .filter(w => w.o !== 0)
+        .sort((a, b) => b.o - a.o)
+        .slice(0, num),
+    )
+  },
+}

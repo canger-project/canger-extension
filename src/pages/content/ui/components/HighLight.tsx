@@ -1,5 +1,5 @@
 import useStorage from "@root/src/shared/hooks/useStorage"
-import vocabularyStorage from "@root/src/shared/storages/VocabularyStorage"
+import { vocabularyStorage } from "@root/src/shared/storages/VocabularyStorage"
 import { createRoot } from "react-dom/client"
 import WordPanel from "./WordPanel"
 
@@ -24,7 +24,8 @@ export default function HighLight(props: { range: Range }) {
         textUnderlineOffset: "2px",
       }}
       onMouseOver={handleMouseOver}
-      onFocus={handleMouseOver}>
+      onFocus={handleMouseOver}
+    >
       {range.toString()}
     </span>
   )
