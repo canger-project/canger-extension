@@ -1,5 +1,5 @@
 import disabledDomainStorage from "@root/src/shared/storages/DisabledDomainStorage"
-import { IconSignature, IconX } from "@tabler/icons-react"
+import { IconSignature } from "@tabler/icons-react"
 import { useState } from "react"
 
 // 写作输入按钮
@@ -33,20 +33,15 @@ export function InputBtn(props: { textarea: HTMLTextAreaElement }) {
       style={{
         position: "relative",
         top: areaRect.height - 38 + "px",
-        left: areaRect.width - 70 + "px",
+        left: areaRect.width - 38 + "px",
       }}
     >
-      <button id="canger-close" onClick={handleCloseBtn}>
-        <IconX size={24} />
-        <span className="tooltip">关闭</span>
-      </button>
-
       {thinking ? (
         <span className="loader"></span>
       ) : (
         <button id="canger-trans" onClick={e => handleClick(e, "writer")}>
           <IconSignature size={24} />
-          <span className="tooltip">翻译+优化</span>
+          <span className="tooltip">翻译/优化</span>
         </button>
       )}
     </div>

@@ -1,6 +1,6 @@
-import vocabularyStorage, { Vocabulary } from "@root/src/shared/storages/VocabularyStorage"
-import { Phonetic } from "../components/WordPanel"
+import { Vocabulary, vocabularyStorage } from "@root/src/shared/storages/VocabularyStorage"
 
+/* 单词面板 */
 export default function Panel(props: { word: Vocabulary; mainStyle: any }) {
   const { word, mainStyle } = props
   const style = {
@@ -45,7 +45,7 @@ export default function Panel(props: { word: Vocabulary; mainStyle: any }) {
         <h2
           style={{
             color: "#020617",
-            fontSize: "1.25em",
+            fontSize: "1.5em",
             fontWeight: 700,
           }}
         >
@@ -83,6 +83,7 @@ export default function Panel(props: { word: Vocabulary; mainStyle: any }) {
       <div
         style={{
           display: "flex",
+          alignItems: "center",
           margin: "4px 0",
           color: "#64748b",
         }}
@@ -101,5 +102,44 @@ export default function Panel(props: { word: Vocabulary; mainStyle: any }) {
         查词次数 {word.o}
       </div>
     </div>
+  )
+}
+
+function Phonetic(props: { type: "us" | "uk"; phonetic: string; speechUrl: string }) {
+  const { type, phonetic, speechUrl } = props
+  const typeCN = { us: "美", uk: "英" }[type]
+
+  function handleClick() {
+    const audio = new Audio(speechUrl)
+    audio.play()
+  }
+
+  return (
+    <span
+      style={{
+        display: "flex",
+        alignItems: "center",
+        margin: "0 4px",
+      }}
+    >
+      <svg
+        onClick={handleClick}
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        strokeWidth="2"
+        stroke="currentColor"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M15 8a5 5 0 0 1 0 8" />
+        <path d="M17.7 5a9 9 0 0 1 0 14" />
+        <path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a.8 .8 0 0 1 1.5 .5v14a.8 .8 0 0 1 -1.5 .5l-3.5 -4.5" />
+      </svg>
+      {typeCN}[{phonetic}]
+    </span>
   )
 }
