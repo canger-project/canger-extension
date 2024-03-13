@@ -32,7 +32,7 @@ button {
   height: 24px;
   border: none;
   border-radius: 50px;
-  color: #6366f1;
+  color: #0f172a;
   background-color: white;
   margin: 0 2px;
   text-align: center;
@@ -41,14 +41,14 @@ button {
 }
 
 button:hover {
-  background-color: #6366f1;
+  background-color: #0f172a;
   color: white;
 }
 
 .tooltip {
   visibility: hidden;
   width: 80px;
-  background-color: #6366f1;
+  background-color: #0f172a;
   color: #fff;
   text-align: center;
   border-radius: 6px;
@@ -79,7 +79,7 @@ button:hover .tooltip {
 .loader {
   width: 18px;
   height: 18px;
-  border: 3px dotted #6366f1;
+  border: 3px dotted #0f172a;
   border-radius: 50%;
   display: inline-block;
   position: relative;
@@ -140,7 +140,7 @@ button:hover .tooltip {
 }
 
 .word-panel .phonetic span :hover {
-  color: #6366f1;
+  color: #0f172a;
 }
 
 .word-highlight {

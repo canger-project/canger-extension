@@ -63,22 +63,24 @@ const Popup: React.FC = () => {
 
   return (
     <Box>
-      <Flex m="2" alignItems={"center"} justifyContent={"space-between"}>
+      <Flex m="4" alignItems={"center"} justifyContent={"space-between"}>
         <Flex alignItems="center">
-          <Image src="/logo.svg" boxSize={6} />
-          <Text fontSize="md">苍耳</Text>
+          <Image src="/logo.svg" boxSize={8} />
+          <Text fontSize="md" mx="2">
+            苍耳
+          </Text>
         </Flex>
         <IconButton
           icon={<IconSettings />}
           aria-label="settings"
           onClick={handleSettings}
           variant="solid"
-          isRound={true}
+          isRound={false}
           size="sm"
         />
       </Flex>
       <Divider />
-      <Box m="2" pb="2">
+      <Box m="4" pb="2">
         <FormControl display="flex" alignItems="center" justifyContent="space-between">
           <FormLabel htmlFor="canger-domain-allow" mb="0">
             <Text size="sm">允许在该网站运行</Text>
