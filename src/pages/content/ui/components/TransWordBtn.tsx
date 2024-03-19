@@ -42,7 +42,7 @@ export function TransWordBtn(props: { selection: Selection }) {
         }
       }
     } else {
-      // 句子面板
+      // show sentence translate result panel
       const resp = await chrome.runtime.sendMessage({ type: "sentence", message: selectedStr })
       setThinking(false)
       const sentence = resp.result[0].translations[0].text
