@@ -8,17 +8,14 @@ export function TransParagraphBtn(props: { ele: HTMLElement }) {
 
   function handleClick(e) {
     setThinking(true)
-    chrome.runtime.sendMessage(
-      { type: "chatgpt", message: { sentence: ele.textContent, kind: "translator" } },
-      function (response) {
-        setThinking(false)
-        const resultEle = document.createElement(ele.tagName)
-        resultEle.className = ele.className
-        resultEle.style.cssText = ele.style.cssText
-        resultEle.innerHTML = response.result
-        ele.insertAdjacentElement("afterend", resultEle)
-      },
-    )
+    chrome.runtime.sendMessage({ type: "sentence", message: ele.textContent }, function (response) {
+      setThinking(false)
+      const resultEle = document.createElement(ele.tagName)
+      resultEle.className = ele.className
+      resultEle.style.cssText = ele.style.cssText
+      resultEle.innerHTML = response.result
+      ele.insertAdjacentElement("afterend", resultEle)
+    })
   }
 
   return (

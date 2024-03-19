@@ -45,7 +45,7 @@ export function TransWordBtn(props: { selection: Selection }) {
       // show sentence translate result panel
       const resp = await chrome.runtime.sendMessage({ type: "sentence", message: selectedStr })
       setThinking(false)
-      const sentence = resp.result[0].translations[0].text
+      const sentence = resp.result
       root.render(<SentencePanel sentence={sentence} selection={selection} />)
     }
   }
