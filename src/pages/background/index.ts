@@ -117,7 +117,9 @@ async function sentenceTranslate(sentence: string) {
     headers: {
       "Content-Type": "application/json",
     },
-  }).then(res => res.json())
+  })
+    .then(res => res.json())
+    .then(data => data[0].translations[0].text)
 }
 
 async function getUnsplashPhoto() {
