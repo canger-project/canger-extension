@@ -5,7 +5,7 @@ import { useState } from "react"
 import { createRoot } from "react-dom/client"
 import { isValidWord } from "../utils"
 import SentencePanel from "./SentencePanel"
-import WordPanel from "./WordPanel"
+import WordPanel, { WordPanelError } from "./WordPanel"
 
 export function TransWordBtn(props: { selection: Selection }) {
   const vocabulary = useStorage(vocabularyStorage)
@@ -18,27 +18,26 @@ export function TransWordBtn(props: { selection: Selection }) {
     const container = document.getElementById("canger-root").shadowRoot.getElementById("canger-trans-container")
     const root = createRoot(container)
     const wordStorage = vocabulary && vocabulary.find(w => w.word === selectedStr)
-    let currentVocabulary: Vocabulary
+    let currentWord: Vocabulary
 
-    // 根据是单词还是句子，展示不同的面板
+    // show different panel according to the type of the selected string
     if (isValidWord(selectedStr)) {
-      // 如果已经存储过该词，直接渲染就行
+      // if the word has been stored, just render it
       if (wordStorage !== undefined) {
-        currentVocabulary = { ...wordStorage, o: wordStorage.o + 1 }
+        currentWord = { ...wordStorage, o: wordStorage.o + 1 }
         setThinking(false)
-        await vocabularyStorage.add(currentVocabulary)
-        root.render(<WordPanel vocabulary={currentVocabulary} selection={selection} />)
+        await vocabularyStorage.add(currentWord)
+        root.render(<WordPanel vocabulary={currentWord} selection={selection} />)
       } else {
         const resp = await chrome.runtime.sendMessage({ type: "dictionary", message: selectedStr })
         const detail = resp.result
-        if (detail.errorCode !== "0") {
-          // TODO: error process
-          console.error(detail)
+        if (detail.errorCode !== "0" || detail.isWord === false) {
+          root.render(<WordPanelError selection={selection} />)
         } else {
-          currentVocabulary = { word: selectedStr, o: 1, detail: detail }
+          currentWord = { word: selectedStr, o: 1, detail: detail }
           setThinking(false)
-          await vocabularyStorage.add(currentVocabulary)
-          root.render(<WordPanel vocabulary={currentVocabulary} selection={selection} />)
+          await vocabularyStorage.add(currentWord)
+          root.render(<WordPanel vocabulary={currentWord} selection={selection} />)
         }
       }
     } else {

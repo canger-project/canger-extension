@@ -35,9 +35,8 @@ export default function WordPanel(props: { vocabulary: Vocabulary; selection: Se
           <span
             className="word-o"
             style={{
-              color: "#6366f1",
               fontSize: "12px",
-              fontWeight: 900,
+              fontWeight: 500,
             }}
           >
             +{vocabulary.o}
@@ -91,5 +90,25 @@ export function Phonetic(props: { type: "us" | "uk"; phonetic: string; speechUrl
       </svg>
       {typeCN}[{phonetic}]
     </span>
+  )
+}
+
+// TODO: better display for error
+export function WordPanelError(props: { selection: Selection | Range }) {
+  const { selection } = props
+  const { top, left } = getSelectionPosition(selection)
+
+  return (
+    <div
+      className="word-panel"
+      style={{
+        position: "absolute",
+        top: top + 24 + "px",
+        left: left + "px",
+        zIndex: 999999,
+      }}
+    >
+      WordPanelError
+    </div>
   )
 }
