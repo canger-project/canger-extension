@@ -1,23 +1,19 @@
 import Logo from "@assets/img/logo.svg"
-import { commonStorage } from "@root/src/shared/storages/CommonStorage"
-import { Vocabulary, vocabularyStorage } from "@root/src/shared/storages/VocabularyStorage"
-import { Container } from "."
+import { Vocabulary } from "@root/src/shared/storages/VocabularyStorage"
+import { Container, Density } from "."
 import { InsertWordsByDensity } from "../utils"
 import Panel from "./Panel"
 
-export async function DoubanContentFlow(domain: string, density: string) {
-  const dailyWordNum = await commonStorage.get().then(common => common.dailyWordNum)
-  const vocabulary = await vocabularyStorage.getsNewWord(dailyWordNum)
-
+export async function DoubanContentFlow(domain: string, words: Vocabulary[], density: Density) {
   // 从生词中取查词数最多的 n 个（由每日背词量控制），
   // 随机出现在内容流的不同位置（由设置中密度控制）
-  if (vocabulary.length > 0) {
+  if (words.length > 0) {
     const domainUrl = new URL(domain)
     switch (domainUrl.hostname) {
       case "www.douban.com": {
         if (domainUrl.pathname === "/") {
           const stream = document.getElementsByClassName("stream-items")[0]
-          InsertWordsByDensity(density as "low" | "medium" | "high", stream, vocabulary, word => {
+          InsertWordsByDensity(density, stream, null, words, word => {
             return Container(<Status word={word} />)
           })
         }
@@ -26,10 +22,7 @@ export async function DoubanContentFlow(domain: string, density: string) {
       case "movie.douban.com":
       case "book.douban.com": {
         const aside = document.getElementsByClassName("aside")[0]
-        aside.insertBefore(
-          Container(<Panel word={vocabulary[0]} mainStyle={{ marginBottom: "24px" }} />),
-          aside.children[0],
-        )
+        aside.insertBefore(Container(<Panel word={words[0]} mainStyle={{ marginBottom: "24px" }} />), aside.children[0])
         break
       }
       default: {

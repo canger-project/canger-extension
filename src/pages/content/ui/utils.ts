@@ -58,45 +58,62 @@ export function getEleLeft(ele: HTMLElement) {
 type Density = "low" | "medium" | "high"
 
 /**
- * 根据内容流密度在不同位置插入单词
- * @param density 密度
- * @param stream 内容流
- * @param words 要记忆的生词
+ * Inserts words into a stream element based on the specified density.
+ *
+ * @param density - The density of word insertion ("high", "medium", or "low").
+ * @param stream - The stream element to insert words into.
+ * @param itemClass - An array of class names that identify valid items in the stream.
+ * @param words - An array of vocabulary words.
+ * @param container - A function that creates a container element for a word.
  */
 export function InsertWordsByDensity(
   density: Density,
   stream: Element,
+  itemClass: string[] | null,
   words: Vocabulary[],
   container: (word: Vocabulary) => HTMLDivElement,
 ) {
-  // 插入单词的间隔
   const streamLength = stream.children.length
   let step = 0
   switch (density) {
     case "high":
-      step = ~~streamLength * 0.2
+      step = Math.floor(streamLength * 0.2)
       break
     case "medium":
-      step = ~~streamLength * 0.5
+      step = Math.floor(streamLength * 0.5)
       break
     case "low":
-      step = ~~streamLength * 0.8
+      step = Math.floor(streamLength * 0.8)
       break
     default:
       break
   }
-  // 插入单词数量
-  let insertWordsNum = ~~(streamLength / step + 1)
+  let insertWordsNum = Math.floor(streamLength / step + 1)
   insertWordsNum = insertWordsNum > words.length ? words.length : insertWordsNum
 
   const insertWords = []
   for (let i = 0; i < insertWordsNum; i++) {
-    const index = ~~(Math.random() * words.length)
+    const index = Math.floor(Math.random() * words.length)
     insertWords.push(words[index])
     words.splice(index, 1)
   }
 
+  // all valid items
+  const validItems = []
+  if (itemClass) {
+    for (const child of stream.children) {
+      if (itemClass.every(item => child.className.includes(item))) {
+        console.info(child.className)
+        validItems.push(child)
+      }
+    }
+  } else {
+    for (const child of stream.children) {
+      validItems.push(child)
+    }
+  }
+
   insertWords.forEach((word, index) => {
-    stream.insertBefore(container(word), stream.children[index * step])
+    validItems[index * step].insertAdjacentElement("beforebegin", container(word))
   })
 }

@@ -9,3 +9,5 @@ export function Container(reactNode: ReactNode) {
   root.render(reactNode)
   return container
 }
+
+export type Density = "low" | "medium" | "high"

@@ -203,7 +203,8 @@ function DisabledDomain() {
                       duration: 1000,
                       isClosable: true,
                     })
-                  }}>
+                  }}
+                >
                   <IconTrash />
                 </Button>
               </Flex>
