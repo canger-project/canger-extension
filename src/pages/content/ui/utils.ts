@@ -13,12 +13,19 @@ export function getSelectWords() {
   return selection.toString().trim()
 }
 
+/**
+ * Calculates the position of a selection or range within the viewport.
+ * @param selection - The selection or range object.
+ * @returns An object containing the top, left, bottom, and right coordinates of the selection.
+ */
 export function getSelectionPosition(selection: Selection | Range) {
   const range = selection instanceof Range ? selection : selection.getRangeAt(0)
   const rect = range.getBoundingClientRect()
   const top = rect.top + window.scrollY - range.startContainer.parentElement.scrollTop
   const left = rect.left + window.scrollX - range.startContainer.parentElement.scrollLeft
-  return { top, left }
+  const bottom = rect.bottom + window.scrollY
+  const right = rect.right + window.scrollX
+  return { top, left, bottom, right }
 }
 
 export function ContainerFlowContainer(reactNode: ReactNode) {

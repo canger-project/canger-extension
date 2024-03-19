@@ -1,7 +1,10 @@
 import { createRoot } from "react-dom/client"
 import { ContainerM } from "../Container"
 
-/* 单词翻译 */
+/**
+ *  translate word(in fact, can translate sentence too.)
+
+*/
 
 export function injectTransWord() {
   const container = document.getElementById("canger-root").shadowRoot.getElementById("canger-trans-container")

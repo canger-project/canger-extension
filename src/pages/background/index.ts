@@ -2,7 +2,7 @@ import reloadOnUpdate from "virtual:reload-on-update-in-background-script"
 import "webextension-polyfill"
 
 const BG_PREFIX = "[background]"
-const CANGER_API = "https://canger.shanxiao.store/api"
+const CANGER_API = "https://canger.fly.dev/api"
 
 reloadOnUpdate("pages/background")
 
@@ -41,7 +41,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       break
     case "dictionary":
       wordTranslate(request.message).then(res => {
-        sendResponse({ result: res })
+        sendResponse({ result: res.origin })
       })
       break
     case "sentence":
