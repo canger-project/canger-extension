@@ -13,7 +13,7 @@ export async function DoubanContentFlow(domain: string, words: Vocabulary[], den
       case "www.douban.com": {
         if (domainUrl.pathname === "/") {
           const stream = document.getElementsByClassName("stream-items")[0]
-          InsertWordsByDensity(density, stream, null, words, word => {
+          InsertWordsByDensity(density, stream, null, null, words, word => {
             return Container(<Status word={word} />)
           })
         }
