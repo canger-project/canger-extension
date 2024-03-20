@@ -69,7 +69,8 @@ type Density = "low" | "medium" | "high"
 export function InsertWordsByDensity(
   density: Density,
   stream: Element,
-  itemClass: string[] | null,
+  itemClassName: string | null,
+  itemIdNamePattern: string | null,
   words: Vocabulary[],
   container: (word: Vocabulary) => HTMLDivElement,
 ) {
@@ -100,11 +101,14 @@ export function InsertWordsByDensity(
 
   // all valid items
   const validItems = []
-  if (itemClass) {
-    for (const child of stream.children) {
-      if (itemClass.every(item => child.className.includes(item))) {
-        console.info(child.className)
-        validItems.push(child)
+  if (itemClassName) {
+    for (const ele of stream.children) {
+      if (ele.className === itemClassName) {
+        if (itemIdNamePattern && ele.id.match(itemIdNamePattern)) {
+          validItems.push(ele)
+          continue
+        }
+        validItems.push(ele)
       }
     }
   } else {
