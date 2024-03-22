@@ -1,8 +1,7 @@
 import { BaseStorage, createStorage, StorageType } from "@src/shared/storages/base"
 
 /**
- * AllowedDomainStorage
- * 黑名单域名存储
+ * DisableDomainStorage
  */
 
 type disabledDomain = string[]
