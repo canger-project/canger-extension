@@ -24,3 +24,5 @@ export const DOMAINS_SELECTOR: DomainSelector[] = [
     selectors: ["div[lang='en']"],
   },
 ]
+
+export const CHECK_IS_ENGLISH_SITE_THRESHOLD = 0.9

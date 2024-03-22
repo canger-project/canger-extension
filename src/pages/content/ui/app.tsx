@@ -5,6 +5,7 @@ import { injectContentFlow } from "./injects/contentFlow"
 import { injectTransInput } from "./injects/input"
 import { injectTransParagraph } from "./injects/transParagraph"
 import { injectTransWord } from "./injects/transWord"
+import { isEnglishSite } from "./utils"
 
 export default function App() {
   const disabledDomain = useStorage(disabledDomainStorage)
@@ -18,14 +19,15 @@ export default function App() {
 
       function inject() {
         injectContentFlow()
-        // 英文网站或者非禁用域名开启段落翻译和写作优化
-        if (!disabledDomain.includes(domain)) {
-          // TODO: 提供是否开启高亮的选项
+        // If it is an English website or a non-disabled domain, turn on
+        // TODO: disableDomains or AllowedDomains
+        if (isEnglishSite()) {
+          // TODO: hightlight words
           // injectHighLightWords()
+          injectTransWord()
           injectTransParagraph()
           injectTransInput()
         }
-        injectTransWord()
       }
 
       if (document.readyState === "loading") {

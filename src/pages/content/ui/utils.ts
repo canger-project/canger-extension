@@ -1,8 +1,8 @@
 import { Vocabulary } from "@root/src/shared/storages/VocabularyStorage"
 import { ReactNode } from "react"
 import { createRoot } from "react-dom/client"
+import { CHECK_IS_ENGLISH_SITE_THRESHOLD } from "./const"
 
-// 是否英文：长度不为空且仅包含单词字母(两边有空格的去掉)
 export function isValidWord(word) {
   word = word.trim()
   return word.length > 0 && /^[a-zA-Z]+$/.test(word)
@@ -120,4 +120,11 @@ export function InsertWordsByDensity(
   insertWords.forEach((word, index) => {
     validItems[index * step].insertAdjacentElement("beforebegin", container(word))
   })
+}
+
+export function isEnglishSite() {
+  const text = document.body.innerText
+  const englishWords = text.match(/[a-zA-Z]+/g)
+  const characters = text.match(/\w+/g)
+  return englishWords.length / characters.length > CHECK_IS_ENGLISH_SITE_THRESHOLD ? true : false
 }
