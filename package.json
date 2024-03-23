@@ -5,7 +5,7 @@
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ischaojie/canger-extension.git"
+    "url": "https://github.com/canger-project/canger-extension.git"
   },
   "scripts": {
     "build": "tsc --noEmit && vite build",
@@ -27,12 +27,12 @@
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
     "@emotion/cache": "^11.11.0",
-    "@emotion/react": "^11.11.3",
+    "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@geist-ui/core": "^2.3.8",
-    "@sentry/browser": "^7.96.0",
-    "@sentry/vite-plugin": "^2.10.3",
-    "@tabler/icons-react": "^2.46.0",
+    "@sentry/browser": "^7.108.0",
+    "@sentry/vite-plugin": "^2.16.0",
+    "@tabler/icons-react": "^2.47.0",
     "animate.css": "^4.1.1",
     "construct-style-sheets-polyfill": "3.1.0",
     "crypto-js": "^4.2.0",
@@ -41,7 +41,7 @@
     "react": "18.2.0",
     "react-card-flip": "^1.2.2",
     "react-dom": "18.2.0",
-    "react-router-dom": "^6.21.3",
+    "react-router-dom": "^6.22.3",
     "webextension-polyfill": "0.10.0"
   },
   "devDependencies": {
@@ -79,7 +79,7 @@
     "ts-loader": "9.5.0",
     "tslib": "2.6.2",
     "typescript": "5.2.2",
-    "vite": "^5.0.12",
+    "vite": "^5.2.4",
     "vitest": "^0.34.6",
     "ws": "8.14.2"
   },

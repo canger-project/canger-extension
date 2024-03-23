@@ -7,12 +7,12 @@ import injectedStyle from "./injected.css?inline"
 refreshOnUpdate("pages/content")
 
 Sentry.init({
-  dsn: "https://deeab7775ed015758561de371e06f1e9@o4505644310593536.ingest.sentry.io/4506536679768064",
+  dsn: "https://3672122b6052a9805b4a98ecf4da8251@o4506930372214785.ingest.us.sentry.io/4506960459726848",
 
   // Alternatively, use `process.env.npm_package_version` for a dynamic release version
   // if your build tool supports it.
   // release: "my-project-name@2.3.12",
-  integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
+  integrations: [new Sentry.BrowserTracing(), Sentry.replayIntegration()],
 
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
@@ -63,5 +63,5 @@ shadowRoot.appendChild(styleElement)
 createRoot(root).render(<App />)
 
 // Toggle the color mode
-const colorSchema = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-chrome.runtime.sendMessage({ type: "colormode", message: colorSchema })
+// const colorSchema = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+// chrome.runtime.sendMessage({ type: "colormode", message: colorSchema })

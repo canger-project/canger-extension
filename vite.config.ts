@@ -42,7 +42,7 @@ export default defineConfig({
     isProduction &&
       sentryVitePlugin({
         org: "shanxiao",
-        project: "canger",
+        project: "canger-extension",
       }),
   ],
   publicDir,
